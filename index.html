@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Asia Wok Sen Neustadt – Speisekarte</title>
+<style>
+:root{
+  --green:#0b5b34;
+  --dark:#062d1b;
+  --mint:#e9f6ed;
+  --pink:#d81b86;
+  --text:#17251c;
+  --muted:#66736a;
+  --card:#ffffff;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:linear-gradient(180deg,#e7f6eb,#fbfffc);color:var(--text)}
+header{
+  background:radial-gradient(circle at top,#16814c 0%,var(--green) 45%,var(--dark) 100%);
+  color:white;text-align:center;padding:34px 16px 26px;border-bottom-left-radius:30px;border-bottom-right-radius:30px
+}
+.logo{width:88px;height:88px;margin:0 auto 12px;border-radius:50%;background:white;color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:30px;box-shadow:0 8px 20px rgba(0,0,0,.22)}
+h1{margin:0;font-size:36px}
+header p{margin:8px 0 0;font-size:15px;opacity:.95}
+.actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.actions a{background:white;color:var(--green);text-decoration:none;padding:11px 15px;border-radius:999px;font-weight:800;font-size:14px}
+.actions a.primary{background:var(--pink);color:white}
+.nav{position:sticky;top:0;background:white;border-bottom:1px solid #ddd;overflow-x:auto;white-space:nowrap;padding:10px;z-index:10}
+.nav a{display:inline-block;margin:0 4px;padding:9px 12px;border-radius:999px;background:#f3f5f3;color:var(--green);text-decoration:none;font-weight:700;font-size:14px}
+main{max-width:820px;margin:0 auto;padding:16px}
+section{margin:18px 0}
+h2{font-size:24px;margin:0 0 12px;color:var(--green)}
+.info{background:white;border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 3px 12px rgba(0,0,0,.07);border-left:5px solid var(--pink);color:var(--muted);font-size:14px}
+.card{background:var(--card);border-radius:16px;margin:9px 0;padding:13px 14px;box-shadow:0 3px 12px rgba(0,0,0,.07);border:1px solid rgba(11,91,52,.08)}
+.row{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}
+.name{font-weight:800;line-height:1.3}
+.desc{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.35}
+.price{font-weight:900;color:var(--green);white-space:nowrap}
+.badge{display:inline-block;background:var(--mint);color:var(--green);padding:4px 9px;border-radius:999px;font-size:12px;font-weight:800;margin-left:6px}
+footer{background:var(--dark);color:white;text-align:center;padding:30px 16px;margin-top:24px;border-top-left-radius:30px;border-top-right-radius:30px;line-height:1.6}
+footer a{color:white}
+.call{display:block;background:var(--pink);color:white;text-decoration:none;font-weight:900;border-radius:14px;padding:14px;margin:16px auto 0;max-width:330px}
+.small{font-size:12px;opacity:.85;margin-top:12px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">AWS</div>
+  <h1>Asia Wok Sen</h1>
+  <p>Asiatische Spezialitäten · Friedrichstraße 7 · 67433 Neustadt</p>
+  <div class="actions">
+    <a class="primary" href="tel:+49632134511">📞 Anrufen</a>
+    <a href="https://www.google.com/maps/search/?api=1&query=Friedrichstraße%207%2067433%20Neustadt">📍 Route</a>
+    <a href="#getraenke">🥤 Getränke</a>
+  </div>
+</header>
+
+<nav class="nav">
+  <a href="#vorspeise">Vorspeise</a>
+  <a href="#vegetarisch">Vegetarisch</a>
+  <a href="#nudeln">Nudeln/Reis</a>
+  <a href="#huhn">Huhn</a>
+  <a href="#hbrust">Hühnerbrust</a>
+  <a href="#schenkel">Schenkel</a>
+  <a href="#rind">Rind</a>
+  <a href="#ente">Ente</a>
+  <a href="#garnelen">Garnelen</a>
+  <a href="#spezial">Spezial</a>
+  <a href="#udon">U-Don</a>
+  <a href="#getraenke">Getränke</a>
+</nav>
+
+<main>
+
+<section id="vorspeise">
+<h2>🥟 Vorspeise</h2>
+<div class="card"><div class="row"><div><div class="name">1. Peking-Suppe</div><div class="desc">süß-sauer-scharf</div></div><div class="price">3,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">2. Hühner-Suppe</div><div class="desc">mit Gemüse</div></div><div class="price">5,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">2a. Tom-Kha-Gai</div><div class="desc">Thai-Suppe</div></div><div class="price">5,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">3. Wantan-Suppe</div></div><div class="price">5,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">3a. Wantan gebacken</div><div class="desc">6 Stück</div></div><div class="price">5,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">4. Chinesische Frühlingsrolle</div><div class="desc">1 Stück</div></div><div class="price">4,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">4a. Vietnamesische Frühlingsrollen</div><div class="desc">3 Stück</div></div><div class="price">5,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">5. Minifrühlingsrollen</div><div class="desc">8 Stück, vegetarisch</div></div><div class="price">4,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">6. Hühnerspieß Saté</div><div class="desc">2 Stück mit Erdnuss-Sauce</div></div><div class="price">5,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">7. Gemischter Salat</div></div><div class="price">7,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">Salat mit Garnelen / Rindfleisch / Hühnerfleisch</div></div><div class="price">8,50 €</div></div></div>
+</section>
+
+<section id="vegetarisch">
+<h2>🥦 Vegetarische Gerichte</h2>
+<div class="card"><div class="row"><div><div class="name">9. Gebratene Nudeln oder gebratener Reis</div><div class="desc">mit Gemüse</div></div><div class="price">7,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">10. Gebratene Nudeln oder gebratener Reis</div><div class="desc">mit Tofu und Gemüse</div></div><div class="price">11,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">10a. Gemüsepfanne</div><div class="desc">verschiedenes gebratenes Gemüse</div></div><div class="price">10,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">10b. Gemüsepfanne Chop-Suey</div><div class="desc">mit Tofu</div></div><div class="price">11,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">11. Gebratener Tofu</div><div class="desc">mit Gemüse und rotem Thai-Curry, scharf</div></div><div class="price">11,00 €</div></div></div>
+</section>
+
+<section id="nudeln">
+<h2>🍜 Gebratene Nudeln, gebratener Reis</h2>
+<div class="info">Alle Gerichte immer mit Ei und Gemüse.</div>
+<div class="card"><div class="row"><div><div class="name">12. Mit Hühnerfleisch</div></div><div class="price">8,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">12a. Bami-Goreng</div><div class="desc">scharf, mit Hühnerfleisch, Krabben und Curry</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">13. Mit Hühnerbrust paniert</div></div><div class="price">11,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">14. Mit Krabben</div></div><div class="price">11,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">15. Mit knusprigem Hähnchenschenkel</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">15a. Mit Rindfleisch</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">16. Mit knuspriger Ente</div></div><div class="price">13,00 €</div></div></div>
+</section>
+
+<section id="huhn">
+<h2>🍛 Hühnerfleisch mit Reis</h2>
+<div class="info">Speisen Nr. 20 bis 92 mit gekochtem Reis als Beilage. Auf Wunsch mit gebratenen Nudeln: +2,50 €.</div>
+<div class="card"><div class="row"><div><div class="name">20. Chop Suey</div><div class="desc">mit verschiedenem Gemüse</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">21. Süß-Sauer</div><div class="desc">mit Ananas</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">22. Thai-Curry</div><div class="desc">mit rotem oder gelbem Thai-Curry, scharf</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">23. Vietnam-Art</div><div class="desc">mit Paprika, Zitronengras und Zwiebeln, leicht scharf</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">24. Kon-Pao</div><div class="desc">mit Gemüse und Knoblauch, scharf</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">25. Szechuan Art</div><div class="desc">mit Gemüse, pikant</div></div><div class="price">12,00 €</div></div></div>
+</section>
+
+<section id="hbrust">
+<h2>🍗 Knusprige Hühnerbrust mit Reis</h2>
+<div class="card"><div class="row"><div><div class="name">30. Chop Suey</div><div class="desc">mit verschiedenem Gemüse</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">31. Süß-Sauer</div><div class="desc">mit Ananas</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">32. Thai-Curry</div><div class="desc">mit rotem oder gelbem Thai-Curry, scharf</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">33. Erdnuss-Soße</div><div class="desc">mit Gemüse</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">34. Kon-Pao</div><div class="desc">mit Gemüse und Knoblauch, scharf</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">35. Szechuan Art</div><div class="desc">mit Gemüse, pikant</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">36. Vietnam-Art</div><div class="desc">mit Paprika, Zitronengras und Zwiebeln, leicht scharf</div></div><div class="price">13,00 €</div></div></div>
+</section>
+
+<section id="schenkel">
+<h2>🍗 Knusprige Hähnchenschenkel mit Reis</h2>
+<div class="info">Ohne Knochen.</div>
+<div class="card"><div class="row"><div><div class="name">40. Chop Suey</div><div class="desc">mit verschiedenem Gemüse</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">41. Süß-Sauer</div><div class="desc">mit Ananas</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">42. Thai-Curry</div><div class="desc">mit rotem oder gelbem Thai-Curry, scharf</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">43. Erdnuss-Soße</div><div class="desc">mit Gemüse</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">44. Kon-Pao</div><div class="desc">mit Gemüse und Knoblauch, scharf</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">45. Szechuan Art</div><div class="desc">mit Gemüse, pikant</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">46. Vietnam-Art</div><div class="desc">mit Paprika, Zitronengras und Zwiebeln, leicht scharf</div></div><div class="price">13,00 €</div></div></div>
+</section>
+
+<section id="rind">
+<h2>🥩 Rindfleisch mit Reis</h2>
+<div class="card"><div class="row"><div><div class="name">60. Chop Suey</div><div class="desc">mit verschiedenem Gemüse</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">61. Süß-Sauer</div><div class="desc">mit Ananas</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">62. Thai-Curry</div><div class="desc">mit rotem oder gelbem Thai-Curry, scharf</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">63. Erdnuss-Soße</div><div class="desc">mit Gemüse</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">64. Kon-Pao</div><div class="desc">mit Gemüse und Knoblauch, scharf</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">65. Szechuan Art</div><div class="desc">mit Gemüse, pikant</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">66. Vietnam-Art</div><div class="desc">mit Paprika, Zitronengras und Zwiebeln, leicht scharf</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">67. Mit Zwiebeln und Paprika</div></div><div class="price">13,00 €</div></div></div>
+</section>
+
+<section id="ente">
+<h2>🦆 Knusprige Ente mit Reis</h2>
+<div class="card"><div class="row"><div><div class="name">70. Chop Suey</div><div class="desc">mit verschiedenem Gemüse</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">71. Süß-Sauer</div><div class="desc">mit Ananas</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">72. Thai-Curry</div><div class="desc">mit rotem oder gelbem Thai-Curry, scharf</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">73. Erdnuss-Soße</div><div class="desc">mit Gemüse</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">74. Kon-Pao</div><div class="desc">mit Gemüse und Knoblauch, scharf</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">75. Szechuan Art</div><div class="desc">mit Gemüse, pikant</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">76. Vietnam-Art</div><div class="desc">mit Paprika, Zitronengras und Zwiebeln, leicht scharf</div></div><div class="price">14,00 €</div></div></div>
+</section>
+
+<section id="garnelen">
+<h2>🍤 Gebratene Garnelen mit Reis</h2>
+<div class="card"><div class="row"><div><div class="name">80. Chop Suey</div><div class="desc">mit verschiedenem Gemüse</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">81. Süß-Sauer</div><div class="desc">mit Ananas</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">82. Thai-Curry</div><div class="desc">mit rotem oder gelbem Thai-Curry, scharf</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">83. Erdnuss-Soße</div><div class="desc">mit Gemüse</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">84. Kon-Pao</div><div class="desc">mit Gemüse und Knoblauch, scharf</div></div><div class="price">14,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">85. Vietnam-Art</div><div class="desc">mit Paprika, Zitronengras und Zwiebeln, leicht scharf</div></div><div class="price">14,00 €</div></div></div>
+</section>
+
+<section id="spezial">
+<h2>⭐ Asia Sen Spezialitäten</h2>
+<div class="card"><div class="row"><div><div class="name">90. Acht Schätze</div><div class="desc">mit Gemüse und 2 Sorten Fleisch, scharf</div></div><div class="price">13,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">91. Roter Phönix</div><div class="desc">Krabben, Hühnerfleisch und Rind Thai-Art, scharf, mit Gemüse, rotem Curry und Kokosmilch</div></div><div class="price">13,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">92. Goldener Drache</div><div class="desc">Krabben, Hühnerfleisch und Rind Vietnam-Art, scharf, mit Gemüse und Zitronengras</div></div><div class="price">13,50 €</div></div></div>
+</section>
+
+<section id="udon">
+<h2>🍲 U-Don</h2>
+<div class="info">Dicke gebratene Weizennudeln mit Gemüse.</div>
+<div class="card"><div class="row"><div><div class="name">A. Tofu</div><div class="desc">vegan</div></div><div class="price">11,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">B. Hühnerfleisch</div></div><div class="price">12,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">C. Rindfleisch</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">D. Garnelen</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">E. Paniertes Hühnerfilet</div></div><div class="price">13,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">F. Knusprige Ente</div></div><div class="price">14,00 €</div></div></div>
+</section>
+
+<section id="getraenke">
+<h2>🥤 Getränke</h2>
+<div class="card"><div class="row"><div><div class="name">Asiafruchtsaft</div><div class="desc">0,25 Dose, Preis zzgl. Pfand</div></div><div class="price">3,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">Verschiedene Getränke</div><div class="desc">0,33 Dose, Preis zzgl. Pfand</div></div><div class="price">2,50 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">Verschiedene Biersorten</div><div class="desc">0,5 Flasche</div></div><div class="price">3,00 €</div></div></div>
+<div class="card"><div class="row"><div><div class="name">Jasmin Tee</div><div class="desc">Tasse</div></div><div class="price">2,50 €</div></div></div>
+</section>
+
+<section>
+<h2>ℹ️ Allergene & Zusatzstoffe</h2>
+<div class="info">1) glutenhaltiges Getreide · 3) Eier · 5) Erdnüsse · 6) Sojabohnen · 7) Milch · d) mit Geschmacksverstärker</div>
+</section>
+
+</main>
+
+<footer>
+  <strong>Asia Wok Sen Neustadt</strong><br>
+  Friedrichstraße 7 · 67433 Neustadt<br>
+  Öffnungszeiten: Montag–Samstag 11:00–20:00 Uhr<br>
+  Feiertag + Sonntag geschlossen
+  <a class="call" href="tel:+49632134511">📞 Jetzt anrufen: +49 6321 34511</a>
+  <div class="small">Alle Preise ohne Gewähr. Änderungen vorbehalten.</div>
+</footer>
+</body>
+</html>
