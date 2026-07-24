@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Küche – Asia Wok Sen</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #0b5b34; min-height: 100vh; padding-bottom: 20px; }
+header { background: #062d1b; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
+header h1 { font-size: 20px; }
+#conn { font-size: 13px; }
+#badge { background: #d81b86; color: white; border-radius: 999px; padding: 4px 14px; font-weight: 900; font-size: 15px; }
+.btn-sound { background: rgba(255,255,255,0.15); color: white; border: none; border-radius: 10px; padding: 7px 12px; cursor: pointer; font-size: 13px; }
+main { padding: 14px; max-width: 640px; margin: 0 auto; }
+#empty { color: rgba(255,255,255,0.5); text-align: center; padding: 60px 20px; font-size: 18px; }
+.card { background: white; border-radius: 18px; padding: 18px; margin-bottom: 14px; border-left: 6px solid #d81b86; animation: pop 0.3s ease; }
+.card.done { border-left-color: #bbb; opacity: 0.5; }
+@keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.tisch-label { font-size: 28px; font-weight: 900; color: #0b5b34; }
+.new-tag { background: #d81b86; color: white; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 3px 10px; margin-left: 8px; }
+.zeit-label { font-size: 12px; color: #888; }
+.order-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 15px; }
+.order-row:last-of-type { border: none; }
+.qty-tag { background: #0b5b34; color: white; border-radius: 999px; padding: 1px 8px; font-size: 13px; font-weight: 800; margin-right: 6px; }
+.total-row { text-align: right; font-weight: 900; color: #0b5b34; font-size: 16px; margin-top: 10px; }
+.note-row { background: #fff8e1; border-left: 3px solid #ffc107; border-radius: 8px; padding: 8px 10px; font-size: 13px; color: #666; margin-top: 8px; }
+.btn-done { width: 100%; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 12px; background: #0b5b34; color: white; }
+.btn-done.done-state { background: #ddd; color: #555; }
+</style>
+</head>
+<body>
+<header>
+  <span id="conn" style="color:#aaa">● Verbinde...</span>
+  <h1>🍳 Küche – Asia Wok Sen</h1>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn-sound" id="btn-sound" onclick="toggleSound()">🔔 Ton AN</button>
+    <span id="badge">0</span>
+  </div>
+</header>
+<main>
+  <div id="empty">⏳ Warte auf Bestellungen...</div>
+  <div id="list"></div>
+</main>
+<script>
+var soundOn = true;
+var count = 0;
+var DB = 'https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen';
+var lastTimestamp = Date.now(); // only alert orders newer than page load
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('btn-sound').textContent = soundOn ? '🔔 Ton AN' : '🔕 Ton AUS';
+}
+
+function beep() {
+  if (!soundOn) return;
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 220, 440].forEach(function(delay) {
+      var o = ctx.createOscillator();
+      var g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value = 880;
+      g.gain.setValueAtTime(0.4, ctx.currentTime + delay/1000);
+      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay/1000 + 0.3);
+      o.start(ctx.currentTime + delay/1000);
+      o.stop(ctx.currentTime + delay/1000 + 0.35);
+    });
+  } catch(e) {}
+}
+
+function renderCard(key, order, isNew) {
+  document.getElementById('empty').style.display = 'none';
+  if (isNew) { count++; document.getElementById('badge').textContent = count; beep(); }
+
+  var rows = '';
+  (order.items || []).forEach(function(it) {
+    rows += '<div class="order-row"><span><span class="qty-tag">' + it.qty + '×</span>' + it.name + '</span><span>' + parseFloat(it.subtotal).toFixed(2).replace('.', ',') + ' €</span></div>';
+  });
+
+  var noteHtml = order.note ? '<div class="note-row">📝 ' + order.note + '</div>' : '';
+  var isDone = order.status === 'fertig';
+
+  var card = document.createElement('div');
+  card.className = 'card' + (isDone ? ' done' : '');
+  card.id = 'card-' + key;
+  card.innerHTML =
+    '<div class="card-top">' +
+      '<div><span class="tisch-label">Tisch ' + order.tisch + '</span>' + (isNew ? '<span class="new-tag">NEU!</span>' : '') + '</div>' +
+      '<span class="zeit-label">' + order.zeit + '</span>' +
+    '</div>' +
+    rows +
+    '<div class="total-row">Gesamt: ' + order.total + ' €</div>' +
+    noteHtml +
+    '<button class="btn-done' + (isDone ? ' done-state' : '') + '" id="btn-' + key + '" onclick="toggle(\'' + key + '\')">' +
+      (isDone ? '↩ Wieder öffnen' : '✅ Fertig – Abgeschlossen') +
+    '</button>';
+
+  var list = document.getElementById('list');
+  list.insertBefore(card, list.firstChild);
+}
+
+function toggle(key) {
+  var card = document.getElementById('card-' + key);
+  var btn = document.getElementById('btn-' + key);
+  var isDone = card.classList.contains('done');
+  var newStatus = isDone ? 'neu' : 'fertig';
+  fetch(DB + '/' + key + '.json', {
+    method: 'PATCH',
+    body: JSON.stringify({ status: newStatus })
+  });
+  card.classList.toggle('done');
+  btn.classList.toggle('done-state');
+  btn.textContent = isDone ? '✅ Fertig – Abgeschlossen' : '↩ Wieder öffnen';
+}
+
+// Load all existing orders on start
+function loadAll() {
+  fetch(DB + '.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      document.getElementById('conn').textContent = '● Verbunden';
+      document.getElementById('conn').style.color = '#7dff9a';
+      if (!data) return;
+      // Sort by timestamp ascending (oldest first, so newest ends up on top after insertBefore)
+      var entries = Object.entries(data).sort(function(a, b) {
+        return (a[1].timestamp || 0) - (b[1].timestamp || 0);
+      });
+      entries.forEach(function(e) {
+        renderCard(e[0], e[1], false);
+      });
+    })
+    .catch(function() {
+      document.getElementById('conn').textContent = '● Verbindungsfehler';
+      document.getElementById('conn').style.color = '#ff6b6b';
+    });
+}
+
+// Poll for new orders every 5 seconds
+function pollNew() {
+  fetch(DB + '.json?orderBy="timestamp"&startAt=' + (lastTimestamp + 1))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data) return;
+      Object.entries(data).forEach(function(e) {
+        var key = e[0], order = e[1];
+        if (!document.getElementById('card-' + key)) {
+          renderCard(key, order, true);
+          lastTimestamp = Math.max(lastTimestamp, order.timestamp || 0);
+        }
+      });
+    });
+}
+
+loadAll();
+setInterval(pollNew, 5000);
+</script>
+</body>
+</html>
