@@ -8,7 +8,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, sans-serif; background: #0b5b34; min-height: 100vh; padding-bottom: 20px; }
 header { background: #062d1b; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
-header h1 { font-size: 20px; }
+header h1 { font-size: 18px; }
 #conn { font-size: 13px; }
 #badge { background: #d81b86; color: white; border-radius: 999px; padding: 4px 14px; font-weight: 900; font-size: 15px; }
 .btn-sound { background: rgba(255,255,255,0.15); color: white; border: none; border-radius: 10px; padding: 7px 12px; cursor: pointer; font-size: 13px; }
@@ -18,7 +18,7 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
 .card.done { border-left-color: #bbb; opacity: 0.5; }
 @keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-.tisch-label { font-size: 28px; font-weight: 900; color: #0b5b34; }
+.tisch-label { font-size: 26px; font-weight: 900; color: #0b5b34; }
 .new-tag { background: #d81b86; color: white; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 3px 10px; margin-left: 8px; }
 .zeit-label { font-size: 12px; color: #888; }
 .order-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 15px; }
@@ -26,8 +26,10 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
 .qty-tag { background: #0b5b34; color: white; border-radius: 999px; padding: 1px 8px; font-size: 13px; font-weight: 800; margin-right: 6px; }
 .total-row { text-align: right; font-weight: 900; color: #0b5b34; font-size: 16px; margin-top: 10px; }
 .note-row { background: #fff8e1; border-left: 3px solid #ffc107; border-radius: 8px; padding: 8px 10px; font-size: 13px; color: #666; margin-top: 8px; }
-.btn-done { width: 100%; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; margin-top: 12px; background: #0b5b34; color: white; }
+.btn-row { display: flex; gap: 8px; margin-top: 12px; }
+.btn-done { flex: 2; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; background: #0b5b34; color: white; }
 .btn-done.done-state { background: #ddd; color: #555; }
+.btn-delete { flex: 1; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; background: #ff3b3b; color: white; }
 </style>
 </head>
 <body>
@@ -47,7 +49,7 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
 var soundOn = true;
 var count = 0;
 var DB = 'https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen';
-var lastTimestamp = Date.now(); // only alert orders newer than page load
+var lastTimestamp = Date.now();
 
 function toggleSound() {
   soundOn = !soundOn;
@@ -94,9 +96,12 @@ function renderCard(key, order, isNew) {
     rows +
     '<div class="total-row">Gesamt: ' + order.total + ' €</div>' +
     noteHtml +
-    '<button class="btn-done' + (isDone ? ' done-state' : '') + '" id="btn-' + key + '" onclick="toggle(\'' + key + '\')">' +
-      (isDone ? '↩ Wieder öffnen' : '✅ Fertig – Abgeschlossen') +
-    '</button>';
+    '<div class="btn-row">' +
+      '<button class="btn-done' + (isDone ? ' done-state' : '') + '" id="btn-' + key + '" onclick="toggle(\'' + key + '\')">' +
+        (isDone ? '↩ Wieder öffnen' : '✅ Fertig') +
+      '</button>' +
+      '<button class="btn-delete" onclick="deleteOrder(\'' + key + '\')">🗑 Löschen</button>' +
+    '</div>';
 
   var list = document.getElementById('list');
   list.insertBefore(card, list.firstChild);
@@ -113,10 +118,29 @@ function toggle(key) {
   });
   card.classList.toggle('done');
   btn.classList.toggle('done-state');
-  btn.textContent = isDone ? '✅ Fertig – Abgeschlossen' : '↩ Wieder öffnen';
+  btn.textContent = isDone ? '✅ Fertig' : '↩ Wieder öffnen';
 }
 
-// Load all existing orders on start
+function deleteOrder(key) {
+  if (!confirm('Bestellung wirklich löschen?')) return;
+  fetch(DB + '/' + key + '.json', { method: 'DELETE' })
+    .then(function() {
+      var card = document.getElementById('card-' + key);
+      if (card) {
+        card.style.transition = 'opacity 0.3s';
+        card.style.opacity = '0';
+        setTimeout(function() {
+          card.remove();
+          count = Math.max(0, count - 1);
+          document.getElementById('badge').textContent = count;
+          if (document.getElementById('list').children.length === 0) {
+            document.getElementById('empty').style.display = 'block';
+          }
+        }, 300);
+      }
+    });
+}
+
 function loadAll() {
   fetch(DB + '.json')
     .then(function(r) { return r.json(); })
@@ -124,13 +148,10 @@ function loadAll() {
       document.getElementById('conn').textContent = '● Verbunden';
       document.getElementById('conn').style.color = '#7dff9a';
       if (!data) return;
-      // Sort by timestamp ascending (oldest first, so newest ends up on top after insertBefore)
       var entries = Object.entries(data).sort(function(a, b) {
         return (a[1].timestamp || 0) - (b[1].timestamp || 0);
       });
-      entries.forEach(function(e) {
-        renderCard(e[0], e[1], false);
-      });
+      entries.forEach(function(e) { renderCard(e[0], e[1], false); });
     })
     .catch(function() {
       document.getElementById('conn').textContent = '● Verbindungsfehler';
@@ -138,7 +159,6 @@ function loadAll() {
     });
 }
 
-// Poll for new orders every 5 seconds
 function pollNew() {
   fetch(DB + '.json?orderBy="timestamp"&startAt=' + (lastTimestamp + 1))
     .then(function(r) { return r.json(); })
