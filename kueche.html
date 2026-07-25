@@ -80,6 +80,7 @@ function renderCard(key, order, isNew) {
   var rows = '';
   (order.items || []).forEach(function(it) {
     rows += '<div class="order-row"><span><span class="qty-tag">' + it.qty + '×</span>' + it.name + '</span><span>' + parseFloat(it.subtotal).toFixed(2).replace('.', ',') + ' €</span></div>';
+    if (it.note) rows += '<div style="font-size:12px;color:#888;padding:2px 0 4px 28px">📝 ' + it.note + '</div>';
   });
 
   var noteHtml = order.note ? '<div class="note-row">📝 ' + order.note + '</div>' : '';
