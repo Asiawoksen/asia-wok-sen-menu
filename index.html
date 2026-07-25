@@ -33,9 +33,9 @@ h2 { font-size: 20px; color: var(--g); margin-bottom: 10px; padding-top: 4px; }
 .qnum { min-width: 22px; text-align: center; font-size: 17px; font-weight: 800; }
 .item-wrap { background: white; border-radius: 14px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow: hidden; }
 .item-wrap .item { border-radius: 0; box-shadow: none; margin-bottom: 0; }
-.rn-select { display: flex; border-top: 1px solid #eee; min-height: 42px; }
-.rn-btn { flex: 1; padding: 10px 2px; border: none; background: #f5f5f5; color: var(--gray); font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s; text-align: center; -webkit-appearance: none; }
-.rn-btn:not(:last-child) { border-right: 1px solid #eee; }
+.rn-select { display: flex; border-top: 1px solid #eee; min-height: 44px; }
+.rn-btn { flex: 1; padding: 10px 4px; border: none; background: #e8f5ed; color: var(--g); font-size: 13px; font-weight: 800; cursor: pointer; text-align: center; -webkit-appearance: none; }
+.rn-btn:not(:last-child) { border-right: 1px solid #ddd; }
 .rn-btn.active { background: var(--g); color: white; }
 .nudeln-opt { border-top: 1px solid #eee; padding: 9px 14px; display: flex; justify-content: space-between; align-items: center; }
 .nudeln-opt label { font-size: 13px; color: var(--gray); display: flex; align-items: center; gap: 8px; cursor: pointer; }
@@ -273,13 +273,22 @@ function goTo(id) {
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
-// Reis/Nudeln toggle (section 12-16)
-var rnState = {}; // rnState['rn12'] = 'Nudeln' or 'Reis'
+// Init default selections on page load
+window.onload = function() {
+  setRN('salat', 'Garnelen');
+};
+
+// Reis/Nudeln toggle
+var rnState = {};
 function setRN(id, val) {
   rnState[id] = val;
   var btns = document.getElementById(id).querySelectorAll('.rn-btn');
-  btns[0].classList.toggle('active', val === 'Nudeln');
-  btns[1].classList.toggle('active', val === 'Reis');
+  btns.forEach(function(btn) {
+    var btnVal = btn.getAttribute('onclick').match(/setRN\('[^']+','([^']+)'\)/);
+    if (btnVal) {
+      btn.classList.toggle('active', btnVal[1] === val);
+    }
+  });
 }
 
 // Nudeln +2.50 toggle (section 20-92)
