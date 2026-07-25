@@ -33,9 +33,9 @@ h2 { font-size: 20px; color: var(--g); margin-bottom: 10px; padding-top: 4px; }
 .qnum { min-width: 22px; text-align: center; font-size: 17px; font-weight: 800; }
 .item-wrap { background: white; border-radius: 14px; margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); overflow: hidden; }
 .item-wrap .item { border-radius: 0; box-shadow: none; margin-bottom: 0; }
-.rn-select { display: flex; border-top: 1px solid #eee; }
-.rn-btn { flex: 1; padding: 9px 4px; border: none; background: #f5f5f5; color: var(--gray); font-size: 13px; font-weight: 700; cursor: pointer; transition: background 0.15s; }
-.rn-btn:first-child { border-right: 1px solid #eee; }
+.rn-select { display: flex; border-top: 1px solid #eee; min-height: 42px; }
+.rn-btn { flex: 1; padding: 10px 2px; border: none; background: #f5f5f5; color: var(--gray); font-size: 12px; font-weight: 700; cursor: pointer; transition: background 0.15s; text-align: center; -webkit-appearance: none; }
+.rn-btn:not(:last-child) { border-right: 1px solid #eee; }
 .rn-btn.active { background: var(--g); color: white; }
 .nudeln-opt { border-top: 1px solid #eee; padding: 9px 14px; display: flex; justify-content: space-between; align-items: center; }
 .nudeln-opt label { font-size: 13px; color: var(--gray); display: flex; align-items: center; gap: 8px; cursor: pointer; }
@@ -96,16 +96,37 @@ textarea { width: 100%; border: 1px solid #ddd; border-radius: 12px; padding: 10
 <div class="item"><div class="item-info"><div class="item-name">5. Minifrühlingsrollen</div><div class="item-desc">8 Stück, vegetarisch</div><div class="item-price">4,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="5. Minifrühlingsrollen" data-p="4.5">+</button></div></div>
 <div class="item"><div class="item-info"><div class="item-name">6. Hühnerspieß Saté</div><div class="item-desc">2 Stück mit Erdnuss-Sauce</div><div class="item-price">5,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="6. Hühnerspieß Saté" data-p="5">+</button></div></div>
 <div class="item"><div class="item-info"><div class="item-name">7. Gemischter Salat</div><div class="item-price">7,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="7. Gemischter Salat" data-p="7.5">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">Salat mit Garnelen / Rind / Huhn</div><div class="item-price">8,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Salat Garnelen/Rind/Huhn" data-p="8.5">+</button></div></div>
+<div class="item-wrap">
+  <div class="item"><div class="item-info"><div class="item-name">Salat mit Fleisch / Meeresfrüchte</div><div class="item-price">8,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Salat" data-p="8.5" data-rn3="salat">+</button></div></div>
+  <div class="rn-select" id="salat">
+    <button class="rn-btn active" onclick="setRN('salat','Garnelen')">🍤 Garnelen</button>
+    <button class="rn-btn" onclick="setRN('salat','Rindfleisch')">🥩 Rind</button>
+    <button class="rn-btn" onclick="setRN('salat','Hühnerfleisch')">🍗 Huhn</button>
+  </div>
+</div>
 </section>
 
 <section id="s2"><h2>🥦 Vegetarische Gerichte</h2>
-<div class="item"><div class="item-info"><div class="item-name">9. Geb. Nudeln/Reis mit Gemüse</div><div class="item-price">7,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="9. Nudeln/Reis mit Gemüse" data-p="7.5">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">10. Geb. Nudeln/Reis mit Tofu</div><div class="item-price">11,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="10. Nudeln/Reis mit Tofu" data-p="11">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">10a. Gemüsepfanne</div><div class="item-price">10,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="10a. Gemüsepfanne" data-p="10">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">10b. Gemüsepfanne Chop-Suey</div><div class="item-desc">mit Tofu</div><div class="item-price">11,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="10b. Gemüsepfanne Chop-Suey" data-p="11">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">11. Gebratener Tofu</div><div class="item-desc">mit Gemüse und Thai-Curry, scharf</div><div class="item-price">11,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="11. Gebratener Tofu" data-p="11">+</button></div></div>
-</section>
+<div class="item-wrap">
+  <div class="item"><div class="item-info"><div class="item-name">9. Gebratene Nudeln oder Reis mit Gemüse</div><div class="item-price">7,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="9. Nudeln/Reis mit Gemüse" data-p="7.5" data-rn="rn9">+</button></div></div>
+  <div class="rn-select" id="rn9"><button class="rn-btn active" onclick="setRN('rn9','Nudeln')">🍜 Nudeln</button><button class="rn-btn" onclick="setRN('rn9','Reis')">🍚 Reis</button></div>
+</div>
+<div class="item-wrap">
+  <div class="item"><div class="item-info"><div class="item-name">10. Gebratene Nudeln oder Reis mit Tofu</div><div class="item-price">11,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="10. Nudeln/Reis mit Tofu" data-p="11" data-rn="rn10">+</button></div></div>
+  <div class="rn-select" id="rn10"><button class="rn-btn active" onclick="setRN('rn10','Nudeln')">🍜 Nudeln</button><button class="rn-btn" onclick="setRN('rn10','Reis')">🍚 Reis</button></div>
+</div>
+<div class="item-wrap">
+  <div class="item"><div class="item-info"><div class="item-name">10a. Gemüsepfanne</div><div class="item-price">10,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="10a. Gemüsepfanne" data-p="10" data-extra="n10a">+</button></div></div>
+  <div class="nudeln-opt"><label><input type="checkbox" id="n10a" onchange="toggleNudeln('n10a','',2.5)"> + Gebratene Nudeln statt Reis</label><span>+2,50 €</span></div>
+</div>
+<div class="item-wrap">
+  <div class="item"><div class="item-info"><div class="item-name">10b. Gemüsepfanne Chop-Suey</div><div class="item-desc">mit Tofu</div><div class="item-price">11,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="10b. Gemüsepfanne Chop-Suey" data-p="11" data-extra="n10b">+</button></div></div>
+  <div class="nudeln-opt"><label><input type="checkbox" id="n10b" onchange="toggleNudeln('n10b','',2.5)"> + Gebratene Nudeln statt Reis</label><span>+2,50 €</span></div>
+</div>
+<div class="item-wrap">
+  <div class="item"><div class="item-info"><div class="item-name">11. Gebratener Tofu</div><div class="item-desc">mit Gemüse und Thai-Curry, scharf</div><div class="item-price">11,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="11. Gebratener Tofu" data-p="11" data-extra="n11">+</button></div></div>
+  <div class="nudeln-opt"><label><input type="checkbox" id="n11" onchange="toggleNudeln('n11','',2.5)"> + Gebratene Nudeln statt Reis</label><span>+2,50 €</span></div>
+</div>
 
 <section id="s3"><h2>🍜 Gebratene Nudeln / Reis</h2>
 <div class="note-box">Alle Gerichte immer mit Ei und Gemüse. Bitte wählen Sie Nudeln oder Reis.</div>
@@ -275,14 +296,18 @@ function ch(btn, delta) {
   var plusBtn = (delta === 1) ? btn : btn.parentElement.querySelector('[data-n]');
   var baseName = plusBtn.dataset.n;
   var price = parseFloat(plusBtn.dataset.p);
-  var rnId = plusBtn.dataset.rn || null;    // for section 12-16
-  var extraId = plusBtn.dataset.extra || null; // for section 20-92
+  var rnId = plusBtn.dataset.rn || null;
+  var rn3Id = plusBtn.dataset.rn3 || null;
+  var extraId = plusBtn.dataset.extra || null;
 
-  // Build full name including Reis/Nudeln choice
   var name = baseName;
   if (rnId) {
     var choice = rnState[rnId] || 'Nudeln';
     name = baseName + ' (mit ' + choice + ')';
+  }
+  if (rn3Id) {
+    var choice3 = rnState[rn3Id] || 'Garnelen';
+    name = baseName + ' mit ' + choice3;
   }
 
   var span = plusBtn.previousElementSibling;
@@ -376,7 +401,7 @@ function resetAll() {
   document.querySelectorAll('.nudeln-opt input[type=checkbox]').forEach(function(cb) { cb.checked = false; });
   document.querySelectorAll('.rn-select').forEach(function(el) {
     var btns = el.querySelectorAll('.rn-btn');
-    btns[0].classList.add('active'); btns[1].classList.remove('active');
+    btns.forEach(function(b, i) { b.classList.toggle('active', i === 0); });
   });
   document.querySelectorAll('.qnum').forEach(function(s) { s.textContent = '0'; });
   document.getElementById('mnote').value = '';
