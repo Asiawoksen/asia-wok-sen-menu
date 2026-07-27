@@ -203,11 +203,21 @@ function loadData() {
         .map(function(e) { return Object.assign({ _key: e[0] }, e[1]); })
         .filter(function(o) {
           if (!from && !to) return true;
-          // Parse date from zeit field (format: DD.MM.YYYY, HH:MM:SS)
-          var dateStr = o.zeit || '';
-          var parts = dateStr.split(',')[0].trim().split('.');
-          if (parts.length < 3) return true;
-          var orderDate = parts[2] + '-' + parts[1] + '-' + parts[0]; // YYYY-MM-DD
+          // Try timestamp first
+          var orderDate = '';
+          if (o.timestamp) {
+            var d = new Date(o.timestamp);
+            orderDate = d.getFullYear() + '-' +
+              String(d.getMonth()+1).padStart(2,'0') + '-' +
+              String(d.getDate()).padStart(2,'0');
+          } else if (o.zeit) {
+            // Try parsing DD.MM.YYYY from zeit
+            var parts = o.zeit.split(',')[0].trim().split('.');
+            if (parts.length >= 3) {
+              orderDate = parts[2].trim() + '-' + parts[1].trim() + '-' + parts[0].trim();
+            }
+          }
+          if (!orderDate) return true;
           if (from && orderDate < from) return false;
           if (to && orderDate > to) return false;
           return true;
@@ -234,14 +244,15 @@ function renderStats(orders) {
   var itemMap = {}; // name -> {qty, revenue}
 
   orders.forEach(function(o) {
-    totalRev += parseFloat(o.total || 0);
+    var orderTotal = parseFloat(o.total) || 0;
+    totalRev += orderTotal;
     (o.items || []).forEach(function(it) {
-      // Skip nudeln extra lines for dish count
       if (it.name && it.name.startsWith('+ Gebratene')) return;
-      totalDishes += it.qty || 0;
-      if (!itemMap[it.name]) itemMap[it.name] = { qty: 0, revenue: 0 };
-      itemMap[it.name].qty += it.qty || 0;
-      itemMap[it.name].revenue += it.subtotal || 0;
+      totalDishes += parseInt(it.qty) || 0;
+      var itemName = it.name || 'Unbekannt';
+      if (!itemMap[itemName]) itemMap[itemName] = { qty: 0, revenue: 0 };
+      itemMap[itemName].qty += parseInt(it.qty) || 0;
+      itemMap[itemName].revenue += parseFloat(it.subtotal) || 0;
     });
   });
 
