@@ -66,6 +66,7 @@ h2 { font-size: 17px; font-weight: 800; color: #0b5b34; margin: 18px 0 10px; }
 
 /* Export button */
 .export-btn { width: 100%; background: #0b5b34; color: white; border: none; border-radius: 14px; padding: 14px; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 10px; }
+.delete-btn { width: 100%; background: white; color: #cc0000; border: 2px solid #cc0000; border-radius: 14px; padding: 14px; font-size: 16px; font-weight: 800; cursor: pointer; margin-top: 10px; }
 
 #loading { text-align: center; padding: 30px; color: #888; }
 </style>
@@ -135,6 +136,9 @@ h2 { font-size: 17px; font-weight: 800; color: #0b5b34; margin: 18px 0 10px; }
 
     <!-- Export -->
     <button class="export-btn" onclick="exportCSV()">📥 Als CSV exportieren</button>
+
+    <!-- Delete all -->
+    <button class="delete-btn" onclick="deleteAll()">🗑 Alle Daten löschen</button>
 
   </div>
   <div id="empty" style="display:none" class="empty">
@@ -337,6 +341,31 @@ function exportCSV() {
   a.href = url;
   a.download = 'asia-wok-sen-umsatz.csv';
   a.click();
+}
+
+function deleteAll() {
+  // Xác nhận lần 1
+  if (!confirm('⚠️ Bạn có chắc muốn xóa TẤT CẢ dữ liệu đơn hàng không?\n\nHành động này KHÔNG THỂ hoàn tác!')) return;
+  
+  // Xác nhận lần 2
+  var input = prompt('Nhập mật khẩu để xác nhận xóa toàn bộ dữ liệu:');
+  if (input !== PASSWORD) {
+    alert('❌ Sai mật khẩu. Không xóa.');
+    return;
+  }
+
+  // Xóa toàn bộ database
+  fetch('https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen.json', {
+    method: 'DELETE'
+  }).then(function() {
+    alert('✅ Đã xóa toàn bộ dữ liệu thành công!');
+    allOrders = [];
+    document.getElementById('content').style.display = 'none';
+    document.getElementById('empty').style.display = 'block';
+    document.getElementById('empty').textContent = '✅ Alle Daten wurden gelöscht.';
+  }).catch(function() {
+    alert('❌ Fehler beim Löschen. Bitte erneut versuchen.');
+  });
 }
 
 // Login handles the initial load
