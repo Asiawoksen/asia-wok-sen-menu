@@ -126,7 +126,7 @@ h2 { font-size: 17px; font-weight: 800; color: #0b5b34; margin: 18px 0 10px; }
     </div>
 
     <!-- Top selling items -->
-    <h2>🏆 Meistverkaufte Gerichte</h2>
+    <h2>📊 Alle Gerichte (nach Menge sortiert)</h2>
     <div class="top-list" id="top-list"></div>
 
     <!-- All orders -->
@@ -260,22 +260,28 @@ function renderStats(orders) {
   document.getElementById('total-dishes').textContent = totalDishes;
   document.getElementById('avg-order').textContent = fmt(avgOrder);
 
-  // Top items
+  // All items sorted by quantity
   var topItems = Object.entries(itemMap)
-    .sort(function(a, b) { return b[1].qty - a[1].qty; })
-    .slice(0, 10);
+    .sort(function(a, b) { return b[1].qty - a[1].qty; });
 
-  var ranks = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'];
   var topHtml = '';
+  var maxQty = topItems.length ? topItems[0][1].qty : 1;
   topItems.forEach(function(e, i) {
+    var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '<span style="display:inline-block;min-width:24px;text-align:center;font-size:13px;color:#aaa">' + (i+1) + '</span>';
+    var barWidth = Math.round((e[1].qty / maxQty) * 100);
     topHtml += '<div class="top-row">' +
-      '<span class="rank">' + (ranks[i] || (i+1)+'.') + '</span>' +
-      '<span class="name">' + e[0] + '</span>' +
+      '<span class="rank">' + medal + '</span>' +
+      '<span class="name">' +
+        '<div style="font-size:14px">' + e[0] + '</div>' +
+        '<div style="height:6px;background:#e8f5ed;border-radius:999px;margin-top:4px">' +
+          '<div style="height:6px;background:#0b5b34;border-radius:999px;width:' + barWidth + '%"></div>' +
+        '</div>' +
+      '</span>' +
       '<span class="qty">' + e[1].qty + '×</span>' +
       '<span class="rev">' + fmt(e[1].revenue) + '</span>' +
       '</div>';
   });
-  document.getElementById('top-list').innerHTML = topHtml || '<div class="top-row">Keine Daten</div>';
+  document.getElementById('top-list').innerHTML = topHtml || '<div class="top-row" style="color:#aaa;padding:16px">Keine Daten</div>';
 
   // Orders list
   var ordersHtml = '';
