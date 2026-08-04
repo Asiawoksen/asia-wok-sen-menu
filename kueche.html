@@ -7,6 +7,17 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, sans-serif; background: #0b5b34; min-height: 100vh; padding-bottom: 20px; }
+
+/* LOGIN */
+#login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: linear-gradient(160deg, #16814c, #062d1b); }
+.login-box { background: white; border-radius: 24px; padding: 36px 28px; text-align: center; width: 90%; max-width: 320px; }
+.login-box .icon { font-size: 48px; margin-bottom: 12px; }
+.login-box h2 { color: #0b5b34; margin-bottom: 6px; font-size: 22px; }
+.login-box p { color: #888; font-size: 14px; margin-bottom: 24px; }
+.login-box input { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 13px; font-size: 16px; text-align: center; letter-spacing: 4px; margin-bottom: 12px; outline: none; }
+.login-box input:focus { border-color: #0b5b34; }
+.login-box button { width: 100%; background: #0b5b34; color: white; border: none; border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 800; cursor: pointer; }
+.pw-error { color: #d81b86; font-size: 13px; margin-top: 10px; display: none; }
 header { background: #062d1b; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
 header h1 { font-size: 18px; }
 #conn { font-size: 13px; }
@@ -42,7 +53,20 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
   </div>
 </header>
 
-<!-- Banner kích hoạt âm thanh -->
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="icon">🍳</div>
+    <h2>Küche – Asia Wok Sen</h2>
+    <p>Nur für Mitarbeiter</p>
+    <input type="password" id="pw-input" placeholder="Passwort" onkeydown="if(event.key==='Enter')checkPw()">
+    <button onclick="checkPw()">Einloggen</button>
+    <div class="pw-error" id="pw-error">❌ Falsches Passwort</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main-content" style="display:none">
 <div id="activate-banner" onclick="initAudio()" style="background:#d81b86;color:white;text-align:center;padding:14px;font-size:15px;font-weight:800;cursor:pointer;">
   🔔 Hier tippen um Benachrichtigungston zu aktivieren!
 </div>
@@ -50,7 +74,25 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
   <div id="empty">⏳ Warte auf Bestellungen...</div>
   <div id="list"></div>
 </main>
+</div> <!-- end main-content -->
+
 <script>
+var KW_PASSWORD = 'bepasiasen2025';
+
+function checkPw() {
+  var val = document.getElementById('pw-input').value.trim();
+  if (val === KW_PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'block';
+    loadAll();
+    setInterval(pollNew, 5000);
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+    setTimeout(function() { document.getElementById('pw-error').style.display = 'none'; }, 3000);
+  }
+}
 var soundOn = true;
 var count = 0;
 var DB = 'https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen';
@@ -210,8 +252,8 @@ function pollNew() {
     });
 }
 
-loadAll();
-setInterval(pollNew, 5000);
+// Login handles loadAll and polling
+
 </script>
 </body>
 </html>
