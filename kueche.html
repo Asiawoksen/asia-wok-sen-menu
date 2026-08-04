@@ -41,6 +41,11 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
     <span id="badge">0</span>
   </div>
 </header>
+
+<!-- Banner kích hoạt âm thanh -->
+<div id="activate-banner" onclick="initAudio()" style="background:#d81b86;color:white;text-align:center;padding:14px;font-size:15px;font-weight:800;cursor:pointer;">
+  🔔 Hier tippen um Benachrichtigungston zu aktivieren!
+</div>
 <main>
   <div id="empty">⏳ Warte auf Bestellungen...</div>
   <div id="list"></div>
@@ -50,6 +55,31 @@ var soundOn = true;
 var count = 0;
 var DB = 'https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen';
 var lastTimestamp = Date.now();
+var audioCtx = null;
+var audioReady = false;
+
+// Khởi động AudioContext sau khi người dùng chạm màn hình
+function initAudio() {
+  if (audioReady) return;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Phát âm thanh im lặng để "mở khóa" trình duyệt
+    var buf = audioCtx.createBuffer(1, 1, 22050);
+    var src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(audioCtx.destination);
+    src.start(0);
+    audioReady = true;
+    document.getElementById('activate-banner').style.display = 'none';
+    console.log('Audio ready');
+  } catch(e) {
+    console.log('Audio init error:', e);
+  }
+}
+
+// Kích hoạt âm thanh khi người dùng chạm bất kỳ đâu
+document.addEventListener('touchstart', initAudio, { once: true });
+document.addEventListener('click', initAudio, { once: true });
 
 function toggleSound() {
   soundOn = !soundOn;
@@ -57,20 +87,25 @@ function toggleSound() {
 }
 
 function beep() {
-  if (!soundOn) return;
+  if (!soundOn || !audioReady || !audioCtx) return;
   try {
-    var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    [0, 220, 440].forEach(function(delay) {
-      var o = ctx.createOscillator();
-      var g = ctx.createGain();
-      o.connect(g); g.connect(ctx.destination);
+    [0, 250, 500].forEach(function(delay) {
+      var o = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      o.connect(g);
+      g.connect(audioCtx.destination);
+      o.type = 'sine';
       o.frequency.value = 880;
-      g.gain.setValueAtTime(0.4, ctx.currentTime + delay/1000);
-      g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay/1000 + 0.3);
-      o.start(ctx.currentTime + delay/1000);
-      o.stop(ctx.currentTime + delay/1000 + 0.35);
+      var t = audioCtx.currentTime + delay / 1000;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(0.5, t + 0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+      o.start(t);
+      o.stop(t + 0.4);
     });
-  } catch(e) {}
+  } catch(e) {
+    console.log('Beep error:', e);
+  }
 }
 
 function renderCard(key, order, isNew) {
@@ -91,7 +126,7 @@ function renderCard(key, order, isNew) {
   card.id = 'card-' + key;
   card.innerHTML =
     '<div class="card-top">' +
-      '<div><span class="tisch-label">Tisch ' + order.tisch + '</span>' + (isNew ? '<span class="new-tag">NEU!</span>' : '') + '</div>' +
+      '<div><span class="tisch-label">👤 ' + order.tisch + '</span>' + (isNew ? '<span class="new-tag">NEU!</span>' : '') + '</div>' +
       '<span class="zeit-label">' + order.zeit + '</span>' +
     '</div>' +
     rows +
