@@ -310,7 +310,7 @@ function renderStats(orders) {
     var noteHtml = o.note ? '<div class="order-note">📝 ' + o.note + '</div>' : '';
     ordersHtml += '<div class="order-card">' +
       '<div class="order-top">' +
-        '<span class="order-tisch">Tisch ' + (o.tisch || '?') + '</span>' +
+        '<span class="order-tisch"> + (o.tisch || '?') + '</span>' +
         '<span class="order-time">' + (o.zeit || '') + '</span>' +
       '</div>' +
       itemsHtml +
