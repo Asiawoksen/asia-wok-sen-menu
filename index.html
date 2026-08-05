@@ -16,6 +16,9 @@ header p { font-size: 14px; opacity: 0.9; margin-bottom: 14px; }
 .tisch-box label { font-weight: 700; font-size: 15px; }
 .tisch-box input { width: 160px; border: none; border-radius: 8px; padding: 6px 10px; font-size: 16px; font-weight: 800; text-align: center; background: white; color: var(--dk); }
 .name-error { color: #ffcccc; font-size: 13px; margin-top: 8px; display: none; font-weight: 700; }
+.order-type-row { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+.otype-btn { flex: 1; max-width: 160px; padding: 12px 8px; border: 2px solid rgba(255,255,255,0.5); border-radius: 14px; background: rgba(255,255,255,0.15); color: white; font-size: 15px; font-weight: 800; cursor: pointer; transition: all 0.2s; }
+.otype-btn.active { background: white; color: #0b5b34; border-color: white; }
 nav { position: sticky; top: 0; background: white; overflow-x: auto; white-space: nowrap; padding: 10px 12px; border-bottom: 1px solid #ddd; z-index: 50; }
 .nbtn { display: inline-block; padding: 8px 14px; margin-right: 6px; background: #eef5ef; color: var(--g); border: none; border-radius: 999px; font-weight: 700; font-size: 13px; cursor: pointer; white-space: nowrap; }
 .nbtn:active { background: var(--g); color: white; }
@@ -72,6 +75,11 @@ textarea { width: 100%; border: 1px solid #ddd; border-radius: 12px; padding: 10
     <input type="text" id="tisch" placeholder="z.B. Max" maxlength="30">
   </div>
   <div class="name-error" id="name-error">⚠️ Dieser Name ist leider nicht erlaubt.</div>
+  <!-- Chọn hình thức -->
+  <div class="order-type-row">
+    <button class="otype-btn active" id="btn-hier" onclick="setOrderType('hier')">🍽️ Hier essen</button>
+    <button class="otype-btn" id="btn-mitnehmen" onclick="setOrderType('mitnehmen')">🥡 Mitnehmen</button>
+  </div>
 </header>
 
 <nav id="nav">
@@ -372,10 +380,17 @@ function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
+// Order type selection
+var orderType = 'hier';
+function setOrderType(type) {
+  orderType = type;
+  document.getElementById('btn-hier').classList.toggle('active', type === 'hier');
+  document.getElementById('btn-mitnehmen').classList.toggle('active', type === 'mitnehmen');
+}
+
 function submitOrder() {
   var tisch = document.getElementById('tisch').value.trim();
 
-  // Kiểm tra tên trống
   if (!tisch) {
     closeModal();
     alert('Bitte zuerst Ihren Namen eingeben!');
@@ -383,7 +398,6 @@ function submitOrder() {
     return;
   }
 
-  // Danh sách từ không được phép
   var banned = [
     'hitler','nazi','heil','nsdap','ss','gestapo','führer','fuhrer',
     'reich','auschwitz','goebbels','himmler','göring','goering',
@@ -392,20 +406,13 @@ function submitOrder() {
     'allah','jihad','terrorist','bombe','bomb',
     'penis','vagina','sex','porno','nackt'
   ];
-
   var nameLower = tisch.toLowerCase().replace(/\s/g,'');
-  var isBanned = banned.some(function(word) {
-    return nameLower.includes(word);
-  });
-
-  if (isBanned) {
+  if (banned.some(function(w){ return nameLower.includes(w); })) {
     closeModal();
     document.getElementById('name-error').style.display = 'block';
     document.getElementById('tisch').value = '';
     document.getElementById('tisch').focus();
-    setTimeout(function() {
-      document.getElementById('name-error').style.display = 'none';
-    }, 4000);
+    setTimeout(function(){ document.getElementById('name-error').style.display = 'none'; }, 4000);
     return;
   }
 
@@ -422,19 +429,19 @@ function submitOrder() {
   });
   var total = items.reduce(function(s, i) { return s + i.subtotal; }, 0).toFixed(2);
 
-  // Send to Firebase using fetch (REST API) — no module import needed
-  var url = 'https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen.json';
-  var data = {
-    tisch: tisch,
-    items: items,
-    total: total,
-    note: note,
-    zeit: new Date().toLocaleString('de-DE'),
-    timestamp: Date.now(),
-    status: 'neu'
-  };
-  fetch(url, { method: 'POST', body: JSON.stringify(data) })
-    .then(function(r) { return r.json(); })
+  fetch('https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen.json', {
+    method: 'POST',
+    body: JSON.stringify({
+      tisch: tisch,
+      orderType: orderType,
+      items: items,
+      total: total,
+      note: note,
+      zeit: new Date().toLocaleString('de-DE'),
+      timestamp: Date.now(),
+      status: 'neu'
+    })
+  }).then(function(r) { return r.json(); })
     .then(function() {
       closeModal();
       document.getElementById('success').style.display = 'flex';
