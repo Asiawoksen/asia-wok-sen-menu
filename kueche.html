@@ -26,6 +26,7 @@ header h1 { font-size: 18px; }
 main { padding: 14px; max-width: 640px; margin: 0 auto; }
 #empty { color: rgba(255,255,255,0.5); text-align: center; padding: 60px 20px; font-size: 18px; }
 .card { background: white; border-radius: 18px; padding: 18px; margin-bottom: 14px; border-left: 6px solid #d81b86; animation: pop 0.3s ease; }
+.card.mitnehmen { border-left-color: #e65100; }
 .card.done { border-left-color: #bbb; opacity: 0.5; }
 @keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
@@ -77,7 +78,7 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
 </div> <!-- end main-content -->
 
 <script>
-var KW_PASSWORD = 'bepasiasen2025';
+var KW_PASSWORD = 'linhdeptrai';
 
 function checkPw() {
   var val = document.getElementById('pw-input').value.trim();
@@ -164,11 +165,15 @@ function renderCard(key, order, isNew) {
   var isDone = order.status === 'fertig';
 
   var card = document.createElement('div');
-  card.className = 'card' + (isDone ? ' done' : '');
+  card.className = 'card' + (isDone ? ' done' : '') + (order.orderType === 'mitnehmen' ? ' mitnehmen' : '');
   card.id = 'card-' + key;
+  var typeBadge = order.orderType === 'mitnehmen'
+    ? '<span style="background:#e65100;color:white;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:800;margin-left:6px">🥡 Mitnehmen</span>'
+    : '<span style="background:#0b5b34;color:white;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:800;margin-left:6px">🍽️ Hier essen</span>';
+
   card.innerHTML =
     '<div class="card-top">' +
-      '<div><span class="tisch-label">👤 ' + order.tisch + '</span>' + (isNew ? '<span class="new-tag">NEU!</span>' : '') + '</div>' +
+      '<div><span class="tisch-label">👤 ' + order.tisch + '</span>' + typeBadge + (isNew ? '<span class="new-tag">NEU!</span>' : '') + '</div>' +
       '<span class="zeit-label">' + order.zeit + '</span>' +
     '</div>' +
     rows +
