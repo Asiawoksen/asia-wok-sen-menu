@@ -77,8 +77,20 @@ textarea { width: 100%; border: 1px solid #ddd; border-radius: 12px; padding: 10
   <div class="name-error" id="name-error">⚠️ Dieser Name ist leider nicht erlaubt.</div>
   <!-- Chọn hình thức -->
   <div class="order-type-row">
-    <button class="otype-btn active" id="btn-hier" onclick="setOrderType('hier')">🍽️ Hier essen</button>
-    <button class="otype-btn" id="btn-mitnehmen" onclick="setOrderType('mitnehmen')">🥡 Mitnehmen</button>
+    <button class="otype-btn active" id="btn-hier" onclick="setOrderType('hier')">🍽️ <span class="t" data-de="Hier essen" data-en="Dine in">Hier essen</span></button>
+    <button class="otype-btn" id="btn-mitnehmen" onclick="setOrderType('mitnehmen')">🥡 <span class="t" data-de="Mitnehmen" data-en="Take away">Mitnehmen</span></button>
+    <button class="otype-btn" id="btn-abholung" onclick="setOrderType('abholung')">📞 <span class="t" data-de="Abholung" data-en="Pre-order">Abholung</span></button>
+  </div>
+  <!-- Abholung time picker -->
+  <div id="abholung-box" style="display:none;margin-top:12px;background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;">
+    <div style="color:white;font-size:13px;font-weight:700;margin-bottom:8px">⏰ <span class="t" data-de="Gewünschte Abholzeit:" data-en="Pickup time:">Gewünschte Abholzeit:</span></div>
+    <input type="time" id="pickup-time" style="border:none;border-radius:8px;padding:8px 12px;font-size:16px;font-weight:800;width:100%;text-align:center;">
+    <div style="color:rgba(255,255,255,0.7);font-size:12px;margin-top:6px">📍 <span class="t" data-de="Öffnungszeiten: Mo–Sa 11:00–20:00 Uhr" data-en="Opening hours: Mon–Sat 11:00–20:00">Öffnungszeiten: Mo–Sa 11:00–20:00 Uhr</span></div>
+  </div>
+  <!-- Language switcher -->
+  <div style="margin-top:12px">
+    <button onclick="setLang('de')" id="lang-de" style="background:white;color:#0b5b34;border:none;border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px;cursor:pointer;margin-right:6px">🇩🇪 DE</button>
+    <button onclick="setLang('en')" id="lang-en" style="background:rgba(255,255,255,0.3);color:white;border:none;border-radius:999px;padding:6px 14px;font-weight:800;font-size:13px;cursor:pointer">🇬🇧 EN</button>
   </div>
 </header>
 
@@ -250,11 +262,11 @@ textarea { width: 100%; border: 1px solid #ddd; border-radius: 12px; padding: 10
 <div class="item-wrap"><div class="item"><div class="item-info"><div class="item-name">F. Knusprige Ente</div><div class="item-price">14,00 €</div></div><div class="item-note"><input type="text" placeholder="📝 Anmerkung (z.B. ohne Scharf, ohne Gemüse...)" data-note="true"></div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="U-Don F. Knusprige Ente" data-p="14">+</button></div></div>
 </section>
 
-<section id="s12"><h2>🥤 Getränke</h2>
-<div class="item"><div class="item-info"><div class="item-name">Asiafruchtsaft</div><div class="item-desc">0,25 Dose, zzgl. Pfand</div><div class="item-price">3,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Asiafruchtsaft" data-p="3">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">Verschiedene Getränke</div><div class="item-desc">0,33 Dose, zzgl. Pfand</div><div class="item-price">2,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Verschiedene Getränke" data-p="2.5">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">Verschiedene Biersorten</div><div class="item-desc">0,5 Flasche</div><div class="item-price">3,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Verschiedene Biersorten" data-p="3">+</button></div></div>
-<div class="item"><div class="item-info"><div class="item-name">Jasmin Tee</div><div class="item-desc">Tasse</div><div class="item-price">2,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Jasmin Tee" data-p="2.5">+</button></div></div>
+<section id="s12"><h2>🥤 <span class="t" data-de="Getränke" data-en="Drinks">Getränke</span></h2>
+<div class="note-box">ℹ️ <span class="t" data-de="Für Verschiedene Getränke bitte direkt an die Theke gehen und dort auswählen." data-en="For various drinks, please go directly to the counter to choose.">Für Verschiedene Getränke bitte direkt an die Theke gehen und dort auswählen.</span></div>
+<div class="item"><div class="item-info"><div class="item-name"><span class="t" data-de="Verschiedene Getränke" data-en="Various drinks">Verschiedene Getränke</span></div><div class="item-desc"><span class="t" data-de="0,33 Dose, zzgl. Pfand – Bitte an Theke wählen" data-en="0.33 can, incl. deposit – Please choose at counter">0,33 Dose, zzgl. Pfand – Bitte an Theke wählen</span></div><div class="item-price">2,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Verschiedene Getränke (Auswahl an Theke)" data-p="2.5">+</button></div></div>
+<div class="item"><div class="item-info"><div class="item-name"><span class="t" data-de="Verschiedene Biersorten" data-en="Various beers">Verschiedene Biersorten</span></div><div class="item-desc">0,5 <span class="t" data-de="Flasche" data-en="bottle">Flasche</span></div><div class="item-price">3,00 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Verschiedene Biersorten" data-p="3">+</button></div></div>
+<div class="item"><div class="item-info"><div class="item-name">Jasmin Tee</div><div class="item-desc"><span class="t" data-de="Tasse" data-en="Cup">Tasse</span></div><div class="item-price">2,50 €</div></div><div class="qty"><button class="qbtn" onclick="ch(this,-1)">−</button><span class="qnum">0</span><button class="qbtn" onclick="ch(this,1)" data-n="Jasmin Tee" data-p="2.5">+</button></div></div>
 </section>
 </main>
 
@@ -274,8 +286,8 @@ textarea { width: 100%; border: 1px solid #ddd; border-radius: 12px; padding: 10
 <div id="success">
   <div class="sbox">
     <div class="icon">✅</div>
-    <h2>Bestellung eingegangen!</h2>
-    <p>Ihre Bestellung wurde direkt an die Küche gesendet. Vielen Dank!</p>
+    <h2 id="success-title">Bestellung eingegangen!</h2>
+    <p id="success-msg">Ihre Bestellung wurde direkt an die Küche gesendet. Vielen Dank!</p>
     <button class="btn-new" onclick="resetAll()">Neue Bestellung</button>
   </div>
 </div>
@@ -380,12 +392,35 @@ function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
-// Order type selection
+// Language
+var currentLang = 'de';
+function setLang(lang) {
+  currentLang = lang;
+  document.querySelectorAll('.t').forEach(function(el) {
+    el.textContent = el.dataset[lang] || el.dataset.de;
+  });
+  document.getElementById('lang-de').style.background = lang === 'de' ? 'white' : 'rgba(255,255,255,0.3)';
+  document.getElementById('lang-de').style.color = lang === 'de' ? '#0b5b34' : 'white';
+  document.getElementById('lang-en').style.background = lang === 'en' ? 'white' : 'rgba(255,255,255,0.3)';
+  document.getElementById('lang-en').style.color = lang === 'en' ? '#0b5b34' : 'white';
+}
+
+// Order type
 var orderType = 'hier';
 function setOrderType(type) {
   orderType = type;
-  document.getElementById('btn-hier').classList.toggle('active', type === 'hier');
-  document.getElementById('btn-mitnehmen').classList.toggle('active', type === 'mitnehmen');
+  ['hier','mitnehmen','abholung'].forEach(function(t) {
+    document.getElementById('btn-' + t).classList.toggle('active', t === type);
+  });
+  document.getElementById('abholung-box').style.display = type === 'abholung' ? 'block' : 'none';
+  if (type === 'abholung') {
+    // Set default pickup time to 30 min from now
+    var now = new Date();
+    now.setMinutes(now.getMinutes() + 30);
+    var hh = String(now.getHours()).padStart(2,'0');
+    var mm = String(now.getMinutes()).padStart(2,'0');
+    document.getElementById('pickup-time').value = hh + ':' + mm;
+  }
 }
 
 function submitOrder() {
@@ -416,6 +451,26 @@ function submitOrder() {
     return;
   }
 
+  // Kiểm tra thời gian Abholung
+  var pickupTime = '';
+  if (orderType === 'abholung') {
+    pickupTime = document.getElementById('pickup-time').value;
+    if (!pickupTime) {
+      closeModal();
+      alert('Bitte geben Sie eine Abholzeit an!');
+      return;
+    }
+    // Kiểm tra giờ mở cửa 11:00-20:00
+    var parts = pickupTime.split(':');
+    var h = parseInt(parts[0]), m = parseInt(parts[1]);
+    var totalMin = h * 60 + m;
+    if (totalMin < 660 || totalMin > 1200) {
+      closeModal();
+      alert('Abholung nur möglich zwischen 11:00 und 20:00 Uhr!');
+      return;
+    }
+  }
+
   var note = document.getElementById('mnote').value.trim();
   var items = [];
   Object.entries(cart).forEach(function(e) {
@@ -434,6 +489,7 @@ function submitOrder() {
     body: JSON.stringify({
       tisch: tisch,
       orderType: orderType,
+      pickupTime: pickupTime || '',
       items: items,
       total: total,
       note: note,
@@ -444,6 +500,13 @@ function submitOrder() {
   }).then(function(r) { return r.json(); })
     .then(function() {
       closeModal();
+      if (orderType === 'abholung') {
+        document.getElementById('success-title').textContent = '✅ Bestellung bestätigt!';
+        document.getElementById('success-msg').textContent = 'Ihre Bestellung wird zur Abholung um ' + pickupTime + ' Uhr vorbereitet. Bitte kommen Sie pünktlich. Vielen Dank!';
+      } else {
+        document.getElementById('success-title').textContent = 'Bestellung eingegangen!';
+        document.getElementById('success-msg').textContent = 'Ihre Bestellung wurde direkt an die Küche gesendet. Vielen Dank!';
+      }
       document.getElementById('success').style.display = 'flex';
     })
     .catch(function() {
