@@ -31,6 +31,7 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
 .card { background: white; border-radius: 18px; padding: 18px; margin-bottom: 14px; border-left: 6px solid #d81b86; animation: pop 0.3s ease; }
 .card.done { border-left-color: #bbb; opacity: 0.5; }
 .card.mitnehmen { border-left-color: #e65100; }
+.card.abholung { border-left-color: #1565c0; }
 @keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px; }
 .tisch-label { font-size: 22px; font-weight: 900; color: #0b5b34; }
@@ -174,6 +175,8 @@ function renderCard(key, order, isNew) {
 
   var typeBadge = order.orderType === 'mitnehmen'
     ? '<span style="background:#e65100;color:white;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800">🥡 Mitnehmen</span>'
+    : order.orderType === 'abholung'
+    ? '<span style="background:#1565c0;color:white;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800">📞 Abholung ' + (order.pickupTime ? 'um ' + order.pickupTime + ' Uhr' : '') + '</span>'
     : '<span style="background:#0b5b34;color:white;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800">🍽️ Hier essen</span>';
 
   var rows = '';
@@ -186,7 +189,7 @@ function renderCard(key, order, isNew) {
   var isDone = order.status === 'fertig';
 
   var card = document.createElement('div');
-  card.className = 'card' + (isDone ? ' done' : '') + (order.orderType === 'mitnehmen' ? ' mitnehmen' : '');
+  card.className = 'card' + (isDone ? ' done' : '') + (order.orderType === 'mitnehmen' ? ' mitnehmen' : order.orderType === 'abholung' ? ' abholung' : '');
   card.id = 'card-' + key;
   card.innerHTML =
     '<div class="card-top">' +
