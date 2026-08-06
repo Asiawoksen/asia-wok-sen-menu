@@ -85,8 +85,9 @@ function checkPw() {
   if (val === KW_PASSWORD) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
+    requestNotificationPermission();
     loadAll();
-    setInterval(pollNew, 5000);
+    setInterval(pollNew, 3000);
   } else {
     document.getElementById('pw-error').style.display = 'block';
     document.getElementById('pw-input').value = '';
@@ -124,7 +125,76 @@ function initAudio() {
 document.addEventListener('touchstart', initAudio, { once: true });
 document.addEventListener('click', initAudio, { once: true });
 
-function toggleSound() {
+var VAPID_KEY = 'BJeZABCynOdowAmdSmrh0cZYb-4rkLaREiAd3PePFkNLypwp6QS9UafrFwF6PqabN4sXP65qVo3IvX9Fit4FcKU';
+var fcmToken = null;
+
+// Đăng ký Service Worker và FCM
+function initFCM() {
+  if (!('serviceWorker' in navigator) || !('Notification' in window)) return;
+
+  Notification.requestPermission().then(function(permission) {
+    if (permission !== 'granted') return;
+
+    // Đăng ký service worker
+    navigator.serviceWorker.register('/asia-wok-sen-menu/firebase-messaging-sw.js')
+      .then(function(reg) {
+        console.log('SW registered');
+
+        // Import Firebase Messaging
+        return import('https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js')
+          .then(function(mod) {
+            var app = firebase_app_instance;
+            var messaging = mod.getMessaging(app);
+
+            // Lấy FCM token
+            return mod.getToken(messaging, { 
+              vapidKey: VAPID_KEY,
+              serviceWorkerRegistration: reg
+            });
+          });
+      })
+      .then(function(token) {
+        if (token) {
+          fcmToken = token;
+          console.log('FCM Token:', token);
+          // Lưu token vào Firebase để server gửi notification
+          saveFCMToken(token);
+        }
+      })
+      .catch(function(e) { console.log('FCM error:', e); });
+  });
+}
+
+function saveFCMToken(token) {
+  fetch('https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/fcm_tokens.json', {
+    method: 'POST',
+    body: JSON.stringify({
+      token: token,
+      device: navigator.userAgent.substring(0, 50),
+      time: Date.now()
+    })
+  });
+}
+
+// Thông báo local (khi app đang mở)
+function sendNotification(order) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  var type = order.orderType === 'mitnehmen' ? '🥡 Mitnehmen' : '🍽️ Hier essen';
+  var body = type + ' – Gesamt: ' + order.total + ' €\n';
+  (order.items || []).slice(0, 3).forEach(function(it) {
+    body += '• ' + it.qty + '× ' + it.name + '\n';
+  });
+  new Notification('🍳 Neue Bestellung – ' + (order.tisch || '?'), {
+    body: body,
+    tag: 'new-order-' + Date.now(),
+    requireInteraction: true,
+    vibrate: [200, 100, 200]
+  });
+}
+
+function requestNotificationPermission() {
+  initFCM();
+}
   soundOn = !soundOn;
   document.getElementById('btn-sound').textContent = soundOn ? '🔔 Ton AN' : '🔕 Ton AUS';
 }
@@ -153,7 +223,12 @@ function beep() {
 
 function renderCard(key, order, isNew) {
   document.getElementById('empty').style.display = 'none';
-  if (isNew) { count++; document.getElementById('badge').textContent = count; beep(); }
+  if (isNew) {
+    count++;
+    document.getElementById('badge').textContent = count;
+    beep();
+    sendNotification(order);
+  }
 
   var rows = '';
   (order.items || []).forEach(function(it) {
@@ -234,7 +309,10 @@ function loadAll() {
       var entries = Object.entries(data).sort(function(a, b) {
         return (a[1].timestamp || 0) - (b[1].timestamp || 0);
       });
-      entries.forEach(function(e) { renderCard(e[0], e[1], false); });
+      entries.forEach(function(e) {
+        renderCard(e[0], e[1], false);
+        lastTimestamp = Math.max(lastTimestamp, e[1].timestamp || 0);
+      });
     })
     .catch(function() {
       document.getElementById('conn').textContent = '● Verbindungsfehler';
@@ -242,18 +320,31 @@ function loadAll() {
     });
 }
 
+var pollErrors = 0;
+
 function pollNew() {
-  fetch(DB + '.json?orderBy="timestamp"&startAt=' + (lastTimestamp + 1))
+  fetch(DB + '.json')
     .then(function(r) { return r.json(); })
     .then(function(data) {
+      pollErrors = 0;
+      document.getElementById('conn').textContent = '● Verbunden';
+      document.getElementById('conn').style.color = '#7dff9a';
       if (!data) return;
       Object.entries(data).forEach(function(e) {
         var key = e[0], order = e[1];
-        if (!document.getElementById('card-' + key)) {
+        var ts = order.timestamp || 0;
+        if (!document.getElementById('card-' + key) && ts > lastTimestamp) {
           renderCard(key, order, true);
-          lastTimestamp = Math.max(lastTimestamp, order.timestamp || 0);
+          lastTimestamp = Math.max(lastTimestamp, ts);
         }
       });
+    })
+    .catch(function() {
+      pollErrors++;
+      if (pollErrors >= 2) {
+        document.getElementById('conn').textContent = '● Verbindungsfehler – wird wiederholt...';
+        document.getElementById('conn').style.color = '#ff6b6b';
+      }
     });
 }
 
