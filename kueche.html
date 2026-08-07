@@ -46,6 +46,8 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
 .btn-done { flex: 2; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; background: #0b5b34; color: white; }
 .btn-done.done-state { background: #ddd; color: #555; }
 .btn-delete { flex: 1; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; background: #ff3b3b; color: white; }
+.btn-pay { flex: 1; border: none; border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 800; cursor: pointer; background: #ff9800; color: white; }
+.btn-pay.paid { background: #4caf50; }
 #conn { font-size: 12px; }
 </style>
 </head>
@@ -221,6 +223,14 @@ function toggle(key) {
   card.classList.toggle('done');
   btn.classList.toggle('done-state');
   btn.textContent = isDone ? '✅ Fertig' : '↩ Wieder öffnen';
+}
+
+function togglePay(key) {
+  var btn = document.getElementById('pay-' + key);
+  var isPaid = btn.classList.contains('paid');
+  fetch(DB + '/' + key + '.json', { method: 'PATCH', body: JSON.stringify({ bezahlt: !isPaid }) });
+  btn.classList.toggle('paid');
+  btn.textContent = isPaid ? '💳 Offen' : '💰 Bezahlt';
 }
 
 function deleteOrder(key) {
