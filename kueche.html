@@ -8,47 +8,58 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: Arial, sans-serif; background: #0b5b34; min-height: 100vh; padding-bottom: 20px; }
 
-/* LOGIN */
 #login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
 .login-box { background: white; border-radius: 24px; padding: 36px 28px; text-align: center; width: 90%; max-width: 320px; }
 .login-box .icon { font-size: 48px; margin-bottom: 12px; }
 .login-box h2 { color: #0b5b34; margin-bottom: 6px; font-size: 22px; }
 .login-box p { color: #888; font-size: 14px; margin-bottom: 24px; }
-.login-box input { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 13px; font-size: 20px; text-align: center; letter-spacing: 6px; margin-bottom: 12px; outline: none; }
+.login-box input { width: 100%; border: 2px solid #ddd; border-radius: 12px; padding: 13px; font-size: 24px; text-align: center; letter-spacing: 8px; margin-bottom: 12px; outline: none; }
 .login-box input:focus { border-color: #0b5b34; }
-.login-box button { width: 100%; background: #0b5b34; color: white; border: none; border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 800; cursor: pointer; }
+.login-box .btn-login { width: 100%; background: #0b5b34; color: white; border: none; border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 800; cursor: pointer; }
 .pw-error { color: #d81b86; font-size: 13px; margin-top: 10px; display: none; font-weight: 700; }
 
-/* MAIN */
 #main-content { display: none; }
-header { background: #062d1b; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; }
-header h1 { font-size: 18px; }
-#badge { background: #d81b86; color: white; border-radius: 999px; padding: 4px 14px; font-weight: 900; font-size: 15px; }
-.btn-sound { background: rgba(255,255,255,0.15); color: white; border: none; border-radius: 10px; padding: 7px 12px; cursor: pointer; font-size: 13px; }
-#activate-banner { background: #d81b86; color: white; text-align: center; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; }
+header { background: #062d1b; color: white; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 10; gap: 8px; flex-wrap: wrap; }
+header h1 { font-size: 16px; }
+#conn { font-size: 12px; }
+#badge { background: #d81b86; color: white; border-radius: 999px; padding: 4px 12px; font-weight: 900; font-size: 14px; }
+.btn-sound { background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 10px; padding: 7px 10px; cursor: pointer; font-size: 13px; }
+
+#activate-banner { background: #d81b86; color: white; text-align: center; padding: 16px; font-size: 16px; font-weight: 800; cursor: pointer; border-bottom: 3px solid #a01060; }
+
 main { padding: 14px; max-width: 640px; margin: 0 auto; }
 #empty { color: rgba(255,255,255,0.5); text-align: center; padding: 60px 20px; font-size: 18px; }
-.card { background: white; border-radius: 18px; padding: 18px; margin-bottom: 14px; border-left: 6px solid #d81b86; animation: pop 0.3s ease; }
-.card.done { border-left-color: #bbb; opacity: 0.5; }
+
+.card { background: white; border-radius: 18px; padding: 18px; margin-bottom: 14px; border-left: 6px solid #d81b86; animation: pop 0.4s ease; }
+.card.done { border-left-color: #bbb; opacity: 0.55; }
 .card.mitnehmen { border-left-color: #e65100; }
 .card.abholung { border-left-color: #1565c0; }
-@keyframes pop { from { transform: scale(0.96); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px; }
+@keyframes pop { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; }
+.name-area { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .tisch-label { font-size: 22px; font-weight: 900; color: #0b5b34; }
-.new-tag { background: #d81b86; color: white; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 3px 10px; }
-.zeit-label { font-size: 12px; color: #888; }
-.order-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 15px; }
+.type-badge { border-radius: 999px; padding: 4px 12px; font-size: 12px; font-weight: 800; color: white; }
+.badge-hier { background: #0b5b34; }
+.badge-mitnehmen { background: #e65100; }
+.badge-abholung { background: #1565c0; }
+.new-tag { background: #d81b86; color: white; font-size: 12px; font-weight: 800; border-radius: 999px; padding: 4px 10px; }
+.zeit-label { font-size: 12px; color: #888; white-space: nowrap; }
+
+.order-row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #f0f0f0; font-size: 14px; gap: 8px; }
 .order-row:last-of-type { border: none; }
-.qty-tag { background: #0b5b34; color: white; border-radius: 999px; padding: 1px 8px; font-size: 13px; font-weight: 800; margin-right: 6px; }
+.qty-tag { background: #0b5b34; color: white; border-radius: 999px; padding: 1px 8px; font-size: 12px; font-weight: 800; margin-right: 4px; flex-shrink: 0; }
+.item-note { font-size: 12px; color: #d81b86; padding: 2px 0 4px 28px; }
+
 .total-row { text-align: right; font-weight: 900; color: #0b5b34; font-size: 16px; margin-top: 10px; }
-.note-row { background: #fff8e1; border-left: 3px solid #ffc107; border-radius: 8px; padding: 8px 10px; font-size: 13px; color: #666; margin-top: 8px; }
-.btn-row { display: flex; gap: 8px; margin-top: 12px; }
-.btn-done { flex: 2; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; background: #0b5b34; color: white; }
-.btn-done.done-state { background: #ddd; color: #555; }
-.btn-delete { flex: 1; border: none; border-radius: 12px; padding: 14px; font-size: 15px; font-weight: 800; cursor: pointer; background: #ff3b3b; color: white; }
-.btn-pay { flex: 1; border: none; border-radius: 12px; padding: 14px; font-size: 14px; font-weight: 800; cursor: pointer; background: #ff9800; color: white; }
+.order-note { background: #fff8e1; border-left: 3px solid #ffc107; border-radius: 8px; padding: 8px 10px; font-size: 13px; color: #666; margin-top: 8px; }
+
+.btn-row { display: flex; gap: 6px; margin-top: 12px; }
+.btn-fertig { flex: 2; border: none; border-radius: 12px; padding: 13px 8px; font-size: 14px; font-weight: 800; cursor: pointer; background: #0b5b34; color: white; }
+.btn-fertig.done-state { background: #ccc; color: #555; }
+.btn-pay { flex: 2; border: none; border-radius: 12px; padding: 13px 8px; font-size: 14px; font-weight: 800; cursor: pointer; background: #ff9800; color: white; }
 .btn-pay.paid { background: #4caf50; }
-#conn { font-size: 12px; }
+.btn-del { flex: 1; border: none; border-radius: 12px; padding: 13px 8px; font-size: 14px; font-weight: 800; cursor: pointer; background: #f44336; color: white; }
 </style>
 </head>
 <body>
@@ -59,25 +70,28 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
     <div class="icon">🍳</div>
     <h2>Küche – Asia Wok Sen</h2>
     <p>Nur für Mitarbeiter</p>
-    <input type="password" id="pw-input" placeholder="****" onkeydown="if(event.key==='Enter')checkPw()">
-    <button onclick="checkPw()">Einloggen</button>
-    <div class="pw-error" id="pw-error">❌ Falsches Passwort</div>
+    <input type="password" id="pw-input" placeholder="****" maxlength="20"
+      onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="btn-login" onclick="checkPw()">Einloggen</button>
+    <div class="pw-error" id="pw-error">❌ Falsches Passwort. Versuche es erneut.</div>
   </div>
 </div>
 
 <!-- MAIN -->
 <div id="main-content">
   <header>
-    <span id="conn" style="color:#aaa">● Verbinde...</span>
+    <span id="conn" style="color:#aaa">⏳ Verbinde...</span>
     <h1>🍳 Küche – Asia Wok Sen</h1>
-    <div style="display:flex;gap:8px;align-items:center">
-      <button class="btn-sound" id="btn-sound" onclick="toggleSound()">🔔 Ton AN</button>
+    <div style="display:flex;gap:6px;align-items:center">
+      <button class="btn-sound" id="btn-sound" onclick="toggleSound()">🔔 AN</button>
       <span id="badge">0</span>
     </div>
   </header>
-  <div id="activate-banner" onclick="initAudio()">
-    🔔 Hier tippen um Ton zu aktivieren!
+
+  <div id="activate-banner" onclick="activateAudio()">
+    👆 Hier tippen um Benachrichtigungston zu aktivieren!
   </div>
+
   <main>
     <div id="empty">⏳ Warte auf Bestellungen...</div>
     <div id="list"></div>
@@ -85,222 +99,256 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
 </div>
 
 <script>
-// ── PASSWORD ──
-var KW_PASSWORD = '1234';
+// ════════════════════════════════
+// PASSWORD
+// ════════════════════════════════
+var PASSWORD = '1234';
 
 function checkPw() {
-  var val = document.getElementById('pw-input').value.trim();
-  if (val === KW_PASSWORD) {
+  var v = document.getElementById('pw-input').value;
+  if (v === PASSWORD) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('main-content').style.display = 'block';
     startApp();
   } else {
-    document.getElementById('pw-error').style.display = 'block';
+    var err = document.getElementById('pw-error');
+    err.style.display = 'block';
     document.getElementById('pw-input').value = '';
-    setTimeout(function() {
-      document.getElementById('pw-error').style.display = 'none';
-    }, 3000);
+    document.getElementById('pw-input').focus();
+    setTimeout(function(){ err.style.display = 'none'; }, 3000);
   }
 }
 
-// ── AUDIO ──
+// ════════════════════════════════
+// AUDIO
+// ════════════════════════════════
 var soundOn = true;
 var audioCtx = null;
-var audioReady = false;
+var audioUnlocked = false;
 
-function initAudio() {
-  if (audioReady) return;
+function activateAudio() {
+  if (audioUnlocked) return;
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Play silent buffer to unlock
     var buf = audioCtx.createBuffer(1, 1, 22050);
     var src = audioCtx.createBufferSource();
     src.buffer = buf;
     src.connect(audioCtx.destination);
     src.start(0);
-    audioReady = true;
-    document.getElementById('activate-banner').style.display = 'none';
-  } catch(e) {}
+    audioUnlocked = true;
+    document.getElementById('activate-banner').innerHTML = '✅ Ton aktiviert! Neue Bestellungen werden akustisch gemeldet.';
+    document.getElementById('activate-banner').style.background = '#4caf50';
+    setTimeout(function(){
+      document.getElementById('activate-banner').style.display = 'none';
+    }, 2000);
+    // Test beep
+    setTimeout(beep, 300);
+  } catch(e) {
+    console.log('Audio error:', e);
+  }
 }
-
-document.addEventListener('touchstart', initAudio, { once: true });
-document.addEventListener('click', initAudio, { once: true });
 
 function toggleSound() {
   soundOn = !soundOn;
-  document.getElementById('btn-sound').textContent = soundOn ? '🔔 Ton AN' : '🔕 Ton AUS';
+  document.getElementById('btn-sound').textContent = soundOn ? '🔔 AN' : '🔕 AUS';
 }
 
 function beep() {
-  if (!soundOn || !audioReady || !audioCtx) return;
+  if (!soundOn || !audioUnlocked || !audioCtx) return;
   try {
-    [0, 250, 500].forEach(function(delay) {
-      var o = audioCtx.createOscillator();
-      var g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.type = 'sine';
-      o.frequency.value = 880;
-      var t = audioCtx.currentTime + delay / 1000;
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(0.5, t + 0.05);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
-      o.start(t); o.stop(t + 0.4);
+    var times = [0, 250, 500];
+    times.forEach(function(d) {
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = 880;
+      var t = audioCtx.currentTime + d / 1000;
+      gain.gain.setValueAtTime(0.001, t);
+      gain.gain.linearRampToValueAtTime(0.6, t + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+      osc.start(t);
+      osc.stop(t + 0.45);
     });
-  } catch(e) {}
+  } catch(e) { console.log('Beep error:', e); }
 }
 
-// ── NOTIFICATION ──
-function sendNotification(order) {
+// ════════════════════════════════
+// NOTIFICATION
+// ════════════════════════════════
+function requestNotif() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+  }
+}
+
+function showNotif(order) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  var type = order.orderType === 'mitnehmen' ? '🥡 Mitnehmen' : '🍽️ Hier essen';
-  var body = type + ' – ' + order.total + ' €';
+  var type = order.orderType === 'mitnehmen' ? '🥡 Mitnehmen'
+           : order.orderType === 'abholung' ? '📞 Abholung ' + (order.pickupTime || '')
+           : '🍽️ Hier essen';
+  var itemList = (order.items || []).slice(0, 3).map(function(i){ return i.qty + '× ' + i.name; }).join(', ');
   new Notification('🍳 Neue Bestellung – ' + (order.tisch || '?'), {
-    body: body,
+    body: type + '\n' + itemList + '\nGesamt: ' + order.total + ' €',
     tag: 'order-' + Date.now(),
     requireInteraction: true
   });
 }
 
-// ── FIREBASE ──
+// ════════════════════════════════
+// FIREBASE / ORDERS
+// ════════════════════════════════
 var DB = 'https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen';
-var lastTimestamp = 0;
-var count = 0;
+var lastTs = 0;
+var orderCount = 0;
 var pollErrors = 0;
 
 function renderCard(key, order, isNew) {
   document.getElementById('empty').style.display = 'none';
+
   if (isNew) {
-    count++;
-    document.getElementById('badge').textContent = count;
+    orderCount++;
+    document.getElementById('badge').textContent = orderCount;
     beep();
-    sendNotification(order);
+    showNotif(order);
   }
 
-  var typeBadge = order.orderType === 'mitnehmen'
-    ? '<span style="background:#e65100;color:white;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800">🥡 Mitnehmen</span>'
-    : order.orderType === 'abholung'
-    ? '<span style="background:#1565c0;color:white;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800">📞 Abholung ' + (order.pickupTime ? 'um ' + order.pickupTime + ' Uhr' : '') + '</span>'
-    : '<span style="background:#0b5b34;color:white;border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800">🍽️ Hier essen</span>';
+  // Type badge
+  var typeClass = 'badge-hier';
+  var typeText = '🍽️ Hier essen';
+  if (order.orderType === 'mitnehmen') { typeClass = 'badge-mitnehmen'; typeText = '🥡 Mitnehmen'; }
+  if (order.orderType === 'abholung')  { typeClass = 'badge-abholung';  typeText = '📞 Abholung' + (order.pickupTime ? ' um ' + order.pickupTime + ' Uhr' : ''); }
 
+  // Items
   var rows = '';
   (order.items || []).forEach(function(it) {
-    rows += '<div class="order-row"><span><span class="qty-tag">' + it.qty + '×</span>' + it.name + '</span><span>' + parseFloat(it.subtotal || 0).toFixed(2).replace('.', ',') + ' €</span></div>';
-    if (it.note) rows += '<div style="font-size:12px;color:#d81b86;padding:2px 0 4px 28px">📝 ' + it.note + '</div>';
+    rows += '<div class="order-row">'
+          + '<span><span class="qty-tag">' + it.qty + '×</span>' + it.name + '</span>'
+          + '<span style="white-space:nowrap">' + parseFloat(it.subtotal||0).toFixed(2).replace('.',',') + ' €</span>'
+          + '</div>';
+    if (it.note) rows += '<div class="item-note">📝 ' + it.note + '</div>';
   });
 
-  var noteHtml = order.note ? '<div class="note-row">📝 ' + order.note + '</div>' : '';
-  var isDone = order.status === 'fertig';
+  var noteHtml = order.note ? '<div class="order-note">📝 ' + order.note + '</div>' : '';
+  var isDone   = order.status === 'fertig';
+  var isPaid   = order.bezahlt === true;
 
   var card = document.createElement('div');
-  card.className = 'card' + (isDone ? ' done' : '') + (order.orderType === 'mitnehmen' ? ' mitnehmen' : order.orderType === 'abholung' ? ' abholung' : '');
   card.id = 'card-' + key;
-  card.innerHTML =
-    '<div class="card-top">' +
-      '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
-        '<span class="tisch-label">👤 ' + (order.tisch || '?') + '</span>' +
-        typeBadge +
-        (isNew ? '<span class="new-tag">NEU!</span>' : '') +
-      '</div>' +
-      '<span class="zeit-label">' + (order.zeit || '') + '</span>' +
-    '</div>' +
-    rows + noteHtml +
-    '<div class="total-row">Gesamt: ' + order.total + ' €</div>' +
-    '<div class="btn-row">' +
-      '<button class="btn-done' + (isDone ? ' done-state' : '') + '" id="btn-' + key + '" onclick="toggle(\'' + key + '\')">' +
-        (isDone ? '↩ Wieder öffnen' : '✅ Fertig') +
-      '</button>' +
-      '<button class="btn-delete" onclick="deleteOrder(\'' + key + '\')">🗑</button>' +
-    '</div>';
+  card.className = 'card'
+    + (isDone ? ' done' : '')
+    + (order.orderType === 'mitnehmen' ? ' mitnehmen' : '')
+    + (order.orderType === 'abholung'  ? ' abholung'  : '');
 
-  var list = document.getElementById('list');
-  list.insertBefore(card, list.firstChild);
+  card.innerHTML =
+    '<div class="card-top">'
+    + '<div class="name-area">'
+    +   '<span class="tisch-label">👤 ' + (order.tisch||'?') + '</span>'
+    +   '<span class="type-badge ' + typeClass + '">' + typeText + '</span>'
+    +   (isNew ? '<span class="new-tag">NEU!</span>' : '')
+    + '</div>'
+    + '<span class="zeit-label">' + (order.zeit||'') + '</span>'
+    + '</div>'
+    + rows
+    + noteHtml
+    + '<div class="total-row">Gesamt: ' + (order.total||'0') + ' €</div>'
+    + '<div class="btn-row">'
+    +   '<button class="btn-fertig' + (isDone ? ' done-state' : '') + '" id="fertig-' + key + '" onclick="toggleFertig(\'' + key + '\')">'
+    +     (isDone ? '↩ Offen' : '✅ Fertig')
+    +   '</button>'
+    +   '<button class="btn-pay' + (isPaid ? ' paid' : '') + '" id="pay-' + key + '" onclick="togglePay(\'' + key + '\')">'
+    +     (isPaid ? '💰 Bezahlt' : '💳 Nicht bezahlt')
+    +   '</button>'
+    +   '<button class="btn-del" onclick="delOrder(\'' + key + '\')">🗑</button>'
+    + '</div>';
+
+  document.getElementById('list').insertBefore(card, document.getElementById('list').firstChild);
 }
 
-function toggle(key) {
+function toggleFertig(key) {
   var card = document.getElementById('card-' + key);
-  var btn = document.getElementById('btn-' + key);
-  var isDone = card.classList.contains('done');
-  fetch(DB + '/' + key + '.json', { method: 'PATCH', body: JSON.stringify({ status: isDone ? 'neu' : 'fertig' }) });
+  var btn  = document.getElementById('fertig-' + key);
+  var done = card.classList.contains('done');
+  fetch(DB + '/' + key + '.json', { method:'PATCH', body: JSON.stringify({ status: done ? 'neu' : 'fertig' }) });
   card.classList.toggle('done');
   btn.classList.toggle('done-state');
-  btn.textContent = isDone ? '✅ Fertig' : '↩ Wieder öffnen';
+  btn.textContent = done ? '✅ Fertig' : '↩ Offen';
 }
 
 function togglePay(key) {
-  var btn = document.getElementById('pay-' + key);
-  var isPaid = btn.classList.contains('paid');
-  fetch(DB + '/' + key + '.json', { method: 'PATCH', body: JSON.stringify({ bezahlt: !isPaid }) });
+  var btn  = document.getElementById('pay-' + key);
+  var paid = btn.classList.contains('paid');
+  fetch(DB + '/' + key + '.json', { method:'PATCH', body: JSON.stringify({ bezahlt: !paid }) });
   btn.classList.toggle('paid');
-  btn.textContent = isPaid ? '💳 Offen' : '💰 Bezahlt';
+  btn.textContent = paid ? '💳 Nicht bezahlt' : '💰 Bezahlt';
 }
 
-function deleteOrder(key) {
+function delOrder(key) {
   if (!confirm('Bestellung wirklich löschen?')) return;
-  fetch(DB + '/' + key + '.json', { method: 'DELETE' }).then(function() {
+  fetch(DB + '/' + key + '.json', { method:'DELETE' }).then(function() {
     var card = document.getElementById('card-' + key);
-    if (card) {
-      card.style.transition = 'opacity 0.3s';
-      card.style.opacity = '0';
-      setTimeout(function() {
-        card.remove();
-        count = Math.max(0, count - 1);
-        document.getElementById('badge').textContent = count;
-        if (!document.getElementById('list').children.length) {
-          document.getElementById('empty').style.display = 'block';
-        }
-      }, 300);
-    }
+    if (!card) return;
+    card.style.transition = 'opacity 0.3s';
+    card.style.opacity = '0';
+    setTimeout(function(){
+      card.remove();
+      orderCount = Math.max(0, orderCount - 1);
+      document.getElementById('badge').textContent = orderCount;
+      if (!document.getElementById('list').children.length)
+        document.getElementById('empty').style.display = 'block';
+    }, 300);
   });
 }
 
 function loadAll() {
   fetch(DB + '.json')
-    .then(function(r) { return r.json(); })
+    .then(function(r){ return r.json(); })
     .then(function(data) {
       document.getElementById('conn').textContent = '● Verbunden';
       document.getElementById('conn').style.color = '#7dff9a';
       if (!data) return;
       Object.entries(data)
-        .sort(function(a, b) { return (a[1].timestamp || 0) - (b[1].timestamp || 0); })
-        .forEach(function(e) {
+        .sort(function(a,b){ return (a[1].timestamp||0)-(b[1].timestamp||0); })
+        .forEach(function(e){
           renderCard(e[0], e[1], false);
-          lastTimestamp = Math.max(lastTimestamp, e[1].timestamp || 0);
+          lastTs = Math.max(lastTs, e[1].timestamp||0);
         });
     })
-    .catch(function() {
-      document.getElementById('conn').textContent = '● Fehler';
+    .catch(function(){
+      document.getElementById('conn').textContent = '● Verbindungsfehler';
       document.getElementById('conn').style.color = '#ff6b6b';
     });
 }
 
 function pollNew() {
   fetch(DB + '.json')
-    .then(function(r) { return r.json(); })
+    .then(function(r){ return r.json(); })
     .then(function(data) {
       pollErrors = 0;
       document.getElementById('conn').textContent = '● Verbunden';
       document.getElementById('conn').style.color = '#7dff9a';
       if (!data) return;
-      Object.entries(data).forEach(function(e) {
+      Object.entries(data).forEach(function(e){
         var key = e[0], order = e[1];
-        if (!document.getElementById('card-' + key) && (order.timestamp || 0) > lastTimestamp) {
+        if (!document.getElementById('card-' + key) && (order.timestamp||0) > lastTs) {
           renderCard(key, order, true);
-          lastTimestamp = Math.max(lastTimestamp, order.timestamp || 0);
+          lastTs = Math.max(lastTs, order.timestamp||0);
         }
       });
     })
-    .catch(function() {
+    .catch(function(){
       pollErrors++;
       if (pollErrors >= 2) {
-        document.getElementById('conn').textContent = '● Verbindungsfehler';
-        document.getElementById('conn').style.color = '#ff6b6b';
+        document.getElementById('conn').textContent = '● Verbindungsfehler – reconnecting...';
+        document.getElementById('conn').style.color = '#ff9800';
       }
     });
 }
 
 function startApp() {
-  if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-  }
+  requestNotif();
   loadAll();
   setInterval(pollNew, 3000);
 }
