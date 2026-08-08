@@ -519,9 +519,9 @@ function submitOrder() {
     var parts = pickupTime.split(':');
     var h = parseInt(parts[0]), m = parseInt(parts[1]);
     var totalMin = h * 60 + m;
-    if (totalMin < 660 || totalMin > 1200) {
+    if (totalMin < 675 || totalMin > 1200) {
       closeModal();
-      alert('Abholung nur möglich zwischen 11:00 und 20:00 Uhr!');
+      alert('Abholung nur möglich zwischen 11:15 und 20:00 Uhr!');
       return;
     }
   }
