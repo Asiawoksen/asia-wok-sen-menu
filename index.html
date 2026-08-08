@@ -84,8 +84,11 @@ textarea { width: 100%; border: 1px solid #ddd; border-radius: 12px; padding: 10
   <!-- Abholung time picker -->
   <div id="abholung-box" style="display:none;margin-top:12px;background:rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;">
     <div style="color:white;font-size:13px;font-weight:700;margin-bottom:8px">⏰ <span class="t" data-de="Gewünschte Abholzeit:" data-en="Pickup time:">Gewünschte Abholzeit:</span></div>
-    <input type="time" id="pickup-time" style="border:none;border-radius:8px;padding:8px 12px;font-size:16px;font-weight:800;width:100%;text-align:center;">
-    <div style="color:rgba(255,255,255,0.7);font-size:12px;margin-top:6px">📍 <span class="t" data-de="Öffnungszeiten: Mo–Sa 11:00–20:00 Uhr" data-en="Opening hours: Mon–Sat 11:00–20:00">Öffnungszeiten: Mo–Sa 11:00–20:00 Uhr</span></div>
+    <input type="time" id="pickup-time" style="border:none;border-radius:8px;padding:8px 12px;font-size:16px;font-weight:800;width:100%;text-align:center;margin-bottom:10px;">
+    <div style="color:white;font-size:13px;font-weight:700;margin-bottom:6px">📞 <span class="t" data-de="Telefonnummer (freiwillig):" data-en="Phone number (optional):">Telefonnummer (freiwillig):</span></div>
+    <input type="tel" id="pickup-phone" placeholder="z.B. 0171 1234567" style="border:none;border-radius:8px;padding:8px 12px;font-size:15px;font-weight:700;width:100%;text-align:center;margin-bottom:6px;">
+    <div style="color:rgba(255,255,255,0.6);font-size:11px;margin-bottom:4px"><span class="t" data-de="Freiwillig – nur für Rückfragen zur Bestellung" data-en="Optional – only for queries about your order">Freiwillig – nur für Rückfragen zur Bestellung</span></div>
+    <div style="color:rgba(255,255,255,0.7);font-size:12px;margin-top:4px">📍 <span class="t" data-de="Öffnungszeiten: Mo–Sa 11:00–20:00 Uhr" data-en="Opening hours: Mon–Sat 11:00–20:00">Öffnungszeiten: Mo–Sa 11:00–20:00 Uhr</span></div>
   </div>
   <!-- Language switcher -->
   <div style="margin-top:12px">
@@ -508,14 +511,15 @@ function submitOrder() {
 
   // Kiểm tra thời gian Abholung
   var pickupTime = '';
+  var pickupPhone = '';
   if (orderType === 'abholung') {
     pickupTime = document.getElementById('pickup-time').value;
+    pickupPhone = document.getElementById('pickup-phone').value.trim();
     if (!pickupTime) {
       closeModal();
       alert('Bitte geben Sie eine Abholzeit an!');
       return;
     }
-    // Kiểm tra giờ mở cửa 11:00-20:00
     var parts = pickupTime.split(':');
     var h = parseInt(parts[0]), m = parseInt(parts[1]);
     var totalMin = h * 60 + m;
@@ -545,6 +549,7 @@ function submitOrder() {
       tisch: tisch,
       orderType: orderType,
       pickupTime: pickupTime || '',
+      pickupPhone: pickupPhone || '',
       items: items,
       total: total,
       note: note,
