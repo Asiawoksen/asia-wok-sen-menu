@@ -219,7 +219,7 @@ function renderCard(key, order, isNew) {
   var typeClass = 'badge-hier';
   var typeText = '🍽️ Hier essen';
   if (order.orderType === 'mitnehmen') { typeClass = 'badge-mitnehmen'; typeText = '🥡 Mitnehmen'; }
-  if (order.orderType === 'abholung')  { typeClass = 'badge-abholung';  typeText = '📞 Abholung' + (order.pickupTime ? ' um ' + order.pickupTime + ' Uhr' : ''); }
+  if (order.orderType === 'abholung')  { typeClass = 'badge-abholung';  typeText = '📞 Abholung' + (order.pickupTime ? ' um ' + order.pickupTime + ' Uhr' : '') + (order.pickupPhone ? ' · Tel: ' + order.pickupPhone : ''); }
 
   // Items
   var rows = '';
