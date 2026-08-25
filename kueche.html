@@ -27,6 +27,11 @@ header h1 { font-size: 16px; }
 
 #activate-banner { background: #d81b86; color: white; text-align: center; padding: 16px; font-size: 16px; font-weight: 800; cursor: pointer; border-bottom: 3px solid #a01060; }
 
+/* Day tabs */
+.day-tabs { display: flex; background: #062d1b; padding: 8px 14px; gap: 8px; overflow-x: auto; }
+.day-tab { background: rgba(255,255,255,0.15); color: white; border: none; border-radius: 999px; padding: 8px 18px; font-size: 14px; font-weight: 800; cursor: pointer; white-space: nowrap; }
+.day-tab.active { background: white; color: #0b5b34; }
+
 main { padding: 14px; max-width: 640px; margin: 0 auto; }
 #empty { color: rgba(255,255,255,0.5); text-align: center; padding: 60px 20px; font-size: 18px; }
 
@@ -69,39 +74,40 @@ main { padding: 14px; max-width: 640px; margin: 0 auto; }
   <div class="login-box">
     <div class="icon">🍳</div>
     <h2>Küche – Asia Wok Sen</h2>
-    <p>Nur für Mitarbeiter</p>
+    <p>Chỉ dành cho nhân viên</p>
     <input type="password" id="pw-input" placeholder="****" maxlength="20"
       onkeydown="if(event.key==='Enter')checkPw()">
-    <button class="btn-login" onclick="checkPw()">Einloggen</button>
-    <div class="pw-error" id="pw-error">❌ Falsches Passwort. Versuche es erneut.</div>
+    <button class="btn-login" onclick="checkPw()">Đăng nhập</button>
+    <div class="pw-error" id="pw-error">❌ Sai mật khẩu. Thử lại!</div>
   </div>
 </div>
 
 <!-- MAIN -->
 <div id="main-content">
   <header>
-    <span id="conn" style="color:#aaa">⏳ Verbinde...</span>
-    <h1>🍳 Küche – Asia Wok Sen</h1>
+    <span id="conn" style="color:#aaa">⏳ Đang kết nối...</span>
+    <h1>🍳 Bếp – Asia Wok Sen</h1>
     <div style="display:flex;gap:6px;align-items:center">
-      <button class="btn-sound" id="btn-sound" onclick="toggleSound()">🔔 AN</button>
+      <button class="btn-sound" id="btn-sound" onclick="toggleSound()">🔔 BẬT</button>
       <span id="badge">0</span>
     </div>
   </header>
 
   <div id="activate-banner" onclick="activateAudio()">
-    👆 Hier tippen um Benachrichtigungston zu aktivieren!
+    👆 Bấm vào đây để bật âm thanh thông báo!
   </div>
 
+  <!-- Day tabs -->
+  <div class="day-tabs" id="day-tabs"></div>
+
   <main>
-    <div id="empty">⏳ Warte auf Bestellungen...</div>
+    <div id="empty">⏳ Chờ đơn hàng mới...</div>
     <div id="list"></div>
   </main>
 </div>
 
 <script>
-// ════════════════════════════════
-// PASSWORD
-// ════════════════════════════════
+// ════════ PASSWORD ════════
 var PASSWORD = '1234';
 
 function checkPw() {
@@ -119,9 +125,7 @@ function checkPw() {
   }
 }
 
-// ════════════════════════════════
-// AUDIO
-// ════════════════════════════════
+// ════════ AUDIO ════════
 var soundOn = true;
 var audioCtx = null;
 var audioUnlocked = false;
@@ -130,54 +134,51 @@ function activateAudio() {
   if (audioUnlocked) return;
   try {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    // Play silent buffer to unlock
     var buf = audioCtx.createBuffer(1, 1, 22050);
     var src = audioCtx.createBufferSource();
     src.buffer = buf;
     src.connect(audioCtx.destination);
     src.start(0);
     audioUnlocked = true;
-    document.getElementById('activate-banner').innerHTML = '✅ Ton aktiviert! Neue Bestellungen werden akustisch gemeldet.';
+    document.getElementById('activate-banner').innerHTML = '✅ Âm thanh đã được bật! Sẽ có tiếng khi có đơn mới.';
     document.getElementById('activate-banner').style.background = '#4caf50';
     setTimeout(function(){
       document.getElementById('activate-banner').style.display = 'none';
     }, 2000);
-    // Test beep
     setTimeout(beep, 300);
-  } catch(e) {
-    console.log('Audio error:', e);
-  }
+  } catch(e) {}
 }
 
 function toggleSound() {
   soundOn = !soundOn;
-  document.getElementById('btn-sound').textContent = soundOn ? '🔔 AN' : '🔕 AUS';
+  document.getElementById('btn-sound').textContent = soundOn ? '🔔 BẬT' : '🔕 TẮT';
 }
 
 function beep() {
   if (!soundOn || !audioUnlocked || !audioCtx) return;
   try {
-    var times = [0, 250, 500];
-    times.forEach(function(d) {
-      var osc = audioCtx.createOscillator();
-      var gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = 880;
-      var t = audioCtx.currentTime + d / 1000;
-      gain.gain.setValueAtTime(0.001, t);
-      gain.gain.linearRampToValueAtTime(0.6, t + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
-      osc.start(t);
-      osc.stop(t + 0.45);
-    });
-  } catch(e) { console.log('Beep error:', e); }
+    // Bíp 10 lần
+    for (var i = 0; i < 10; i++) {
+      (function(idx) {
+        var delay = idx * 300;
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = idx % 2 === 0 ? 880 : 660;
+        var t = audioCtx.currentTime + delay / 1000;
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.linearRampToValueAtTime(0.6, t + 0.05);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+        osc.start(t);
+        osc.stop(t + 0.25);
+      })(i);
+    }
+  } catch(e) {}
 }
 
-// ════════════════════════════════
-// NOTIFICATION
-// ════════════════════════════════
+// ════════ NOTIFICATION ════════
 function requestNotif() {
   if ('Notification' in window && Notification.permission === 'default') {
     Notification.requestPermission();
@@ -186,28 +187,107 @@ function requestNotif() {
 
 function showNotif(order) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  var type = order.orderType === 'mitnehmen' ? '🥡 Mitnehmen'
-           : order.orderType === 'abholung' ? '📞 Abholung ' + (order.pickupTime || '')
-           : '🍽️ Hier essen';
+  var type = order.orderType === 'mitnehmen' ? '🥡 Mang về'
+           : order.orderType === 'abholung'  ? '📞 Abholung ' + (order.pickupTime || '')
+           : '🍽️ Ăn tại quán';
   var itemList = (order.items || []).slice(0, 3).map(function(i){ return i.qty + '× ' + i.name; }).join(', ');
-  new Notification('🍳 Neue Bestellung – ' + (order.tisch || '?'), {
-    body: type + '\n' + itemList + '\nGesamt: ' + order.total + ' €',
+  new Notification('🍳 Đơn mới – ' + (order.tisch || '?'), {
+    body: type + '\n' + itemList + '\nTổng: ' + order.total + ' €',
     tag: 'order-' + Date.now(),
     requireInteraction: true
   });
 }
 
-// ════════════════════════════════
-// FIREBASE / ORDERS
-// ════════════════════════════════
+// ════════ DAY TABS ════════
+var allOrders = {}; // key -> order
+var currentDay = '';
+
+function getDateStr(timestamp) {
+  if (!timestamp) return 'Hôm nay';
+  var d = new Date(timestamp);
+  var today = new Date();
+  var tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
+  var yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  var ds = d.toDateString();
+  if (ds === today.toDateString()) return 'Hôm nay';
+  if (ds === tomorrow.toDateString()) return 'Ngày mai';
+  if (ds === yesterday.toDateString()) return 'Hôm qua';
+  return d.getDate() + '.' + (d.getMonth()+1) + '.' + d.getFullYear();
+}
+
+function groupByDay(orders) {
+  var days = {};
+  Object.entries(orders).forEach(function(e) {
+    var key = e[0], order = e[1];
+    var day = getDateStr(order.timestamp);
+    if (!days[day]) days[day] = {};
+    days[day][key] = order;
+  });
+  return days;
+}
+
+function renderDayTabs(days) {
+  var tabsEl = document.getElementById('day-tabs');
+  var dayKeys = Object.keys(days);
+
+  // Sort: Hôm nay first, then others
+  dayKeys.sort(function(a, b) {
+    if (a === 'Hôm nay') return -1;
+    if (b === 'Hôm nay') return 1;
+    if (a === 'Ngày mai') return -1;
+    if (b === 'Ngày mai') return 1;
+    return 0;
+  });
+
+  tabsEl.innerHTML = '';
+  if (dayKeys.length === 0) return;
+
+  if (!currentDay || !dayKeys.includes(currentDay)) {
+    currentDay = dayKeys[0];
+  }
+
+  dayKeys.forEach(function(day) {
+    var count = Object.keys(days[day]).length;
+    var btn = document.createElement('button');
+    btn.className = 'day-tab' + (day === currentDay ? ' active' : '');
+    btn.textContent = day + ' (' + count + ')';
+    btn.onclick = function() {
+      currentDay = day;
+      renderDayTabs(groupByDay(allOrders));
+      renderOrders(days[day]);
+    };
+    tabsEl.appendChild(btn);
+  });
+}
+
+function renderOrders(orders) {
+  var listEl = document.getElementById('list');
+  listEl.innerHTML = '';
+
+  var entries = Object.entries(orders)
+    .sort(function(a, b) { return (b[1].timestamp||0) - (a[1].timestamp||0); });
+
+  if (entries.length === 0) {
+    document.getElementById('empty').style.display = 'block';
+    return;
+  }
+  document.getElementById('empty').style.display = 'none';
+
+  entries.forEach(function(e) {
+    renderCard(e[0], e[1], false);
+  });
+}
+
+// ════════ FIREBASE / ORDERS ════════
 var DB = 'https://asia-wok-sen-default-rtdb.europe-west1.firebasedatabase.app/bestellungen';
 var lastTs = 0;
 var orderCount = 0;
 var pollErrors = 0;
 
 function renderCard(key, order, isNew) {
-  document.getElementById('empty').style.display = 'none';
-
   if (isNew) {
     orderCount++;
     document.getElementById('badge').textContent = orderCount;
@@ -215,13 +295,11 @@ function renderCard(key, order, isNew) {
     showNotif(order);
   }
 
-  // Type badge
   var typeClass = 'badge-hier';
-  var typeText = '🍽️ Hier essen';
-  if (order.orderType === 'mitnehmen') { typeClass = 'badge-mitnehmen'; typeText = '🥡 Mitnehmen'; }
-  if (order.orderType === 'abholung')  { typeClass = 'badge-abholung';  typeText = '📞 Abholung' + (order.pickupTime ? ' um ' + order.pickupTime + ' Uhr' : '') + (order.pickupPhone ? ' · Tel: ' + order.pickupPhone : ''); }
+  var typeText = '🍽️ Ăn tại quán';
+  if (order.orderType === 'mitnehmen') { typeClass = 'badge-mitnehmen'; typeText = '🥡 Mang về'; }
+  if (order.orderType === 'abholung')  { typeClass = 'badge-abholung';  typeText = '📞 Abholung' + (order.pickupTime ? ' lúc ' + order.pickupTime : '') + (order.pickupPhone ? ' – ☎ ' + order.pickupPhone : ''); }
 
-  // Items
   var rows = '';
   (order.items || []).forEach(function(it) {
     rows += '<div class="order-row">'
@@ -247,24 +325,24 @@ function renderCard(key, order, isNew) {
     + '<div class="name-area">'
     +   '<span class="tisch-label">👤 ' + (order.tisch||'?') + '</span>'
     +   '<span class="type-badge ' + typeClass + '">' + typeText + '</span>'
-    +   (isNew ? '<span class="new-tag">NEU!</span>' : '')
+    +   (isNew ? '<span class="new-tag">MỚI!</span>' : '')
     + '</div>'
     + '<span class="zeit-label">' + (order.zeit||'') + '</span>'
     + '</div>'
     + rows
     + noteHtml
-    + '<div class="total-row">Gesamt: ' + (order.total||'0') + ' €</div>'
+    + '<div class="total-row">Tổng: ' + (order.total||'0') + ' €</div>'
     + '<div class="btn-row">'
     +   '<button class="btn-fertig' + (isDone ? ' done-state' : '') + '" id="fertig-' + key + '" onclick="toggleFertig(\'' + key + '\')">'
-    +     (isDone ? '↩ Offen' : '✅ Fertig')
+    +     (isDone ? '↩ Mở lại' : '✅ Xong')
     +   '</button>'
     +   '<button class="btn-pay' + (isPaid ? ' paid' : '') + '" id="pay-' + key + '" onclick="togglePay(\'' + key + '\')">'
-    +     (isPaid ? '💰 Bezahlt' : '💳 Nicht bezahlt')
+    +     (isPaid ? '💰 Đã thanh toán' : '💳 Chưa thanh toán')
     +   '</button>'
     +   '<button class="btn-del" onclick="delOrder(\'' + key + '\')">🗑</button>'
     + '</div>';
 
-  document.getElementById('list').insertBefore(card, document.getElementById('list').firstChild);
+  document.getElementById('list').appendChild(card);
 }
 
 function toggleFertig(key) {
@@ -274,7 +352,7 @@ function toggleFertig(key) {
   fetch(DB + '/' + key + '.json', { method:'PATCH', body: JSON.stringify({ status: done ? 'neu' : 'fertig' }) });
   card.classList.toggle('done');
   btn.classList.toggle('done-state');
-  btn.textContent = done ? '✅ Fertig' : '↩ Offen';
+  btn.textContent = done ? '✅ Xong' : '↩ Mở lại';
 }
 
 function togglePay(key) {
@@ -282,23 +360,28 @@ function togglePay(key) {
   var paid = btn.classList.contains('paid');
   fetch(DB + '/' + key + '.json', { method:'PATCH', body: JSON.stringify({ bezahlt: !paid }) });
   btn.classList.toggle('paid');
-  btn.textContent = paid ? '💳 Nicht bezahlt' : '💰 Bezahlt';
+  btn.textContent = paid ? '💳 Chưa thanh toán' : '💰 Đã thanh toán';
 }
 
 function delOrder(key) {
-  if (!confirm('Bestellung wirklich löschen?')) return;
+  if (!confirm('Xóa đơn hàng này?')) return;
   fetch(DB + '/' + key + '.json', { method:'DELETE' }).then(function() {
+    delete allOrders[key];
     var card = document.getElementById('card-' + key);
-    if (!card) return;
-    card.style.transition = 'opacity 0.3s';
-    card.style.opacity = '0';
-    setTimeout(function(){
-      card.remove();
-      orderCount = Math.max(0, orderCount - 1);
-      document.getElementById('badge').textContent = orderCount;
-      if (!document.getElementById('list').children.length)
-        document.getElementById('empty').style.display = 'block';
-    }, 300);
+    if (card) {
+      card.style.transition = 'opacity 0.3s';
+      card.style.opacity = '0';
+      setTimeout(function(){
+        card.remove();
+        orderCount = Math.max(0, orderCount - 1);
+        document.getElementById('badge').textContent = orderCount;
+        // Refresh tabs
+        var days = groupByDay(allOrders);
+        renderDayTabs(days);
+        if (days[currentDay]) renderOrders(days[currentDay]);
+        else document.getElementById('empty').style.display = 'block';
+      }, 300);
+    }
   });
 }
 
@@ -306,18 +389,22 @@ function loadAll() {
   fetch(DB + '.json')
     .then(function(r){ return r.json(); })
     .then(function(data) {
-      document.getElementById('conn').textContent = '● Verbunden';
+      document.getElementById('conn').textContent = '● Đã kết nối';
       document.getElementById('conn').style.color = '#7dff9a';
       if (!data) return;
-      Object.entries(data)
-        .sort(function(a,b){ return (a[1].timestamp||0)-(b[1].timestamp||0); })
-        .forEach(function(e){
-          renderCard(e[0], e[1], false);
-          lastTs = Math.max(lastTs, e[1].timestamp||0);
-        });
+
+      allOrders = {};
+      Object.entries(data).forEach(function(e) {
+        allOrders[e[0]] = e[1];
+        lastTs = Math.max(lastTs, e[1].timestamp||0);
+      });
+
+      var days = groupByDay(allOrders);
+      renderDayTabs(days);
+      if (currentDay && days[currentDay]) renderOrders(days[currentDay]);
     })
     .catch(function(){
-      document.getElementById('conn').textContent = '● Verbindungsfehler';
+      document.getElementById('conn').textContent = '● Lỗi kết nối';
       document.getElementById('conn').style.color = '#ff6b6b';
     });
 }
@@ -327,21 +414,40 @@ function pollNew() {
     .then(function(r){ return r.json(); })
     .then(function(data) {
       pollErrors = 0;
-      document.getElementById('conn').textContent = '● Verbunden';
+      document.getElementById('conn').textContent = '● Đã kết nối';
       document.getElementById('conn').style.color = '#7dff9a';
       if (!data) return;
-      Object.entries(data).forEach(function(e){
+
+      var hasNew = false;
+      Object.entries(data).forEach(function(e) {
         var key = e[0], order = e[1];
-        if (!document.getElementById('card-' + key) && (order.timestamp||0) > lastTs) {
-          renderCard(key, order, true);
+        if ((order.timestamp||0) > lastTs) {
+          allOrders[key] = order;
           lastTs = Math.max(lastTs, order.timestamp||0);
+          hasNew = true;
+          // If new order is for current day, add card
+          var day = getDateStr(order.timestamp);
+          if (day === currentDay) {
+            if (!document.getElementById('card-' + key)) {
+              renderCard(key, order, true);
+            }
+          } else {
+            // New order in different day — show notification and refresh tabs
+            beep();
+            showNotif(order);
+          }
         }
       });
+
+      if (hasNew) {
+        var days = groupByDay(allOrders);
+        renderDayTabs(days);
+      }
     })
     .catch(function(){
       pollErrors++;
       if (pollErrors >= 2) {
-        document.getElementById('conn').textContent = '● Verbindungsfehler – reconnecting...';
+        document.getElementById('conn').textContent = '● Đang kết nối lại...';
         document.getElementById('conn').style.color = '#ff9800';
       }
     });
