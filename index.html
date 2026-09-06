@@ -503,6 +503,42 @@ function setOrderType(type) {
   }
 }
 
+// ── TELEGRAM NOTIFICATION ──
+var TG_TOKEN = '8629161843:AAG-yGgYqZ_iWOrml_jzlN5Z-DHeLS_EkUg';
+var TG_CHAT  = '5824752260';
+
+function sendTelegram(tisch, orderType, items, total, pickupTime, pickupPhone, note) {
+  var typeEmoji = orderType === 'mitnehmen' ? '🥡 Mitnehmen'
+                : orderType === 'abholung'  ? '📞 Abholung um ' + pickupTime + (pickupPhone ? ' · ☎ ' + pickupPhone : '')
+                : '🍽️ Hier essen';
+
+  var lines = ['🍳 *NEUE BESTELLUNG!*', ''];
+  lines.push('👤 *Name:* ' + tisch);
+  lines.push('🏷️ *Art:* ' + typeEmoji);
+  lines.push('🕐 *Zeit:* ' + new Date().toLocaleString('de-DE'));
+  lines.push('');
+  lines.push('📋 *Bestellung:*');
+  items.forEach(function(it) {
+    lines.push('  • ' + it.qty + '× ' + it.name + ' – ' + parseFloat(it.subtotal).toFixed(2).replace('.', ',') + ' €');
+    if (it.note) lines.push('    📝 ' + it.note);
+  });
+  lines.push('');
+  lines.push('💰 *Gesamt: ' + parseFloat(total).toFixed(2).replace('.', ',') + ' €*');
+  if (note) lines.push('📝 *Anmerkung:* ' + note);
+
+  var msg = lines.join('\n');
+
+  fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: TG_CHAT,
+      text: msg,
+      parse_mode: 'Markdown'
+    })
+  }).catch(function(e) { console.log('Telegram error:', e); });
+}
+
 function submitOrder() {
   var tisch = document.getElementById('tisch').value.trim();
 
@@ -581,6 +617,9 @@ function submitOrder() {
     })
   }).then(function(r) { return r.json(); })
     .then(function() {
+      // Gửi thông báo Telegram
+      sendTelegram(tisch, orderType, items, total, pickupTime, pickupPhone, note);
+
       closeModal();
       if (orderType === 'abholung') {
         document.getElementById('success-title').textContent = currentLang === 'en' ? '✅ Order confirmed!' : '✅ Bestellung bestätigt!';
