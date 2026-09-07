@@ -505,7 +505,7 @@ function setOrderType(type) {
 
 // ── TELEGRAM NOTIFICATION ──
 var TG_TOKEN = '8629161843:AAG-yGgYqZ_iWOrml_jzlN5Z-DHeLS_EkUg';
-var TG_CHAT  = '5824752260';
+var TG_CHATS  = ['5824752260', '-1004328984051'];
 
 function sendTelegram(tisch, orderType, items, total, pickupTime, pickupPhone, note) {
   var typeEmoji = orderType === 'mitnehmen' ? '🥡 Mitnehmen'
@@ -528,15 +528,18 @@ function sendTelegram(tisch, orderType, items, total, pickupTime, pickupPhone, n
 
   var msg = lines.join('\n');
 
-  fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      chat_id: TG_CHAT,
-      text: msg,
-      parse_mode: 'Markdown'
-    })
-  }).catch(function(e) { console.log('Telegram error:', e); });
+  // Gửi đến tất cả chat (cá nhân + group)
+  TG_CHATS.forEach(function(chatId) {
+    fetch('https://api.telegram.org/bot' + TG_TOKEN + '/sendMessage', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: msg,
+        parse_mode: 'Markdown'
+      })
+    }).catch(function(e) { console.log('Telegram error:', e); });
+  });
 }
 
 function submitOrder() {
